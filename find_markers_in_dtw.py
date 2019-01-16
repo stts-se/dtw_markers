@@ -263,27 +263,3 @@ while i < len(markers1_list):
     
 
 
-
-#Print lab files fo audacity. Move to separate script!    
-print_aud = False
-if print_aud:
-    markers1_file = "dvorak7_markers1_audacity_lab.txt"
-    markers2_file = "dvorak7_markers2_audacity_lab.txt"
-    #markers1_file = "dvorak7_part1_markers1_audacity_lab.txt"
-    #markers2_file = "dvorak7_part1_markers2_audacity_lab.txt"
-
-
-    lab1 = open(markers1_file,"w")
-    i = 0
-    while i < len(markers1_list):
-        lab1.write("%.2f\t%.2f\t%d\n" % (markers1_list[i], markers1_list[i], i+1))
-        i += 1
-    lab1.close()
-
-
-    lab2 = open(markers2_file,"w")
-    i = 0
-    while i < len(markers2_list):
-        lab2.write("%.2f\t%.2f\t%d\n" % (markers2_list[i], markers2_list[i], i+1))
-        i += 1
-    lab2.close()
