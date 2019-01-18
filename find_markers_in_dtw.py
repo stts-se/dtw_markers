@@ -24,7 +24,10 @@ audiofile2 = 'audio/Dvorak 7 K1 no markers part1.mp3'
 #Input files
 dtw_file = sys.argv[1]
 marker_file = sys.argv[2]
-
+if len(sys.argv) > 3:
+    samplerate = int(sys.argv[3])
+else:
+    samplerate = 22050
 
 nr_frames_per_second = 50.0
 
@@ -71,8 +74,8 @@ wp = np.load(open(dtw_file))
 
 n_fft = 4800
 
-hop_size = 2400
-#hop_size = 1200
+#hop_size = 2400
+hop_size = 1200
 
 # arrows.. explain?
 
@@ -84,23 +87,23 @@ arrows = hop_size
 #Audio will be automatically resampled to the given rate (default sr=22050).
 #To preserve the native sampling rate of the file, use sr=None.
 
-fs = 22050
+
 if display:
     sys.stderr.write("Loading audiofiles for display\n")
-    x_1, fs = librosa.load(audiofile1)
-    x_2, fs = librosa.load(audiofile2)
+    x_1, samplerate = librosa.load(audiofile1, sr=None)
+    x_2, samplerate = librosa.load(audiofile2, sr=None)
 
     fig = plt.figure(figsize=(16, 8))
 
     # Plot x_1
     plt.subplot(2, 1, 1)
-    librosa.display.waveplot(x_1, sr=fs)
+    librosa.display.waveplot(x_1, sr=samplerate)
     plt.title(audiofile1)
     ax1 = plt.gca()
 
     # Plot x_2
     plt.subplot(2, 1, 2)
-    librosa.display.waveplot(x_2, sr=fs)
+    librosa.display.waveplot(x_2, sr=samplerate)
     plt.title(audiofile2)
     ax2 = plt.gca()
     
@@ -156,8 +159,8 @@ markers2_list = []
 sys.stderr.write("Finding markers\n")
 
 # for tp1, tp2 in zip((wp[points_idx, 0]) * hop_size, (wp[points_idx, 1]) * hop_size):
-#HBfor tp1, tp2 in wp[points_idx] * hop_size / fs:
-for tp1, tp2 in wp[points_idx] * float(hop_size) / fs:
+#HBfor tp1, tp2 in wp[points_idx] * hop_size / samplerate:
+for tp1, tp2 in wp[points_idx] * float(hop_size) / samplerate:
 
     #print("tp1: %d, tp2: %d" % (tp1,tp2))
 
