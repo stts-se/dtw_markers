@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
 
-import sys
+import sys, re
 
 import numpy as np
 import matplotlib
@@ -11,25 +11,45 @@ import librosa
 import librosa.display
 
 #For extra prints
-debug = False
+debug = True
 
 
 #For display. Slow and takes a lot of memory! audiofile1 and 2 are only read if display is True
 display = False
-audiofile1 = 'audio/Dvorak 7 Master part1.mp3'
-audiofile2 = 'audio/Dvorak 7 K1 no markers part1.mp3'
+#audiofile1 = 'audio/Dvorak 7 Master part1.mp3'
+#audiofile2 = 'audio/Dvorak 7 K1 no markers part1.mp3'
+audiofile1 = 'data/sir_duke_fast.mp3'
+audiofile2 = 'data/sir_duke_slow.mp3'
+
 #
 
 
 #Input files
 dtw_file = sys.argv[1]
+
+
+
 marker_file = sys.argv[2]
 if len(sys.argv) > 3:
     samplerate = int(sys.argv[3])
 else:
-    samplerate = 22050
+    samplerate = 22050.0
 
+
+m = re.search("_([0-9]+)_([0-9]+)_([0-9]+).npy$", dtw_file)
+if m:
+    samplerate = float(m.group(1))
+    n_fft = float(m.group(2))
+    hop_size = float(m.group(3))
+else:
+    n_fft = 4410.0
+    hop_size = 2205.0
+
+#HB NOTE    
 nr_frames_per_second = 50.0
+
+
+sys.stderr.write("SETTINGS: samplerate: %s, n_fft: %s, hop_size: %s\n" % (samplerate, n_fft, hop_size))
 
 def readMarkers(filename):
     markers = []
@@ -62,25 +82,29 @@ sys.stderr.write("Reading markers from %s\n" % marker_file)
 markers = readMarkers(marker_file)
 sys.stderr.write("Read %d markers\n" % len(markers))
 
+if debug:
+    sys.stderr.write("MARKERS: %s\n" % markers)
+
+
+marker_nr = len(markers)
+
 ########################
 # Load dtw-aligned chroma points
 
 sys.stderr.write("Loading dtw points\n")
-wp = np.load(open(dtw_file))
+wp = np.load(open(dtw_file, "rb"))
+
+sys.stderr.write("len(wp): %s\n" % len(wp))
 
 
 # Settings
-# n_fft and hop_size should correspond to values used in dtw
-
-n_fft = 4800
-
-#hop_size = 2400
-hop_size = 1200
 
 # arrows.. explain?
 
-#arrows = 300    
-arrows = hop_size    
+arrows = 30
+#Used with display
+#arrows = 30
+#arrows = hop_size    
 
 
 #librosa documentation:
@@ -90,8 +114,10 @@ arrows = hop_size
 
 if display:
     sys.stderr.write("Loading audiofiles for display\n")
-    x_1, samplerate = librosa.load(audiofile1, sr=None)
-    x_2, samplerate = librosa.load(audiofile2, sr=None)
+    #x_1, samplerate = librosa.load(audiofile1, sr=None)
+    #x_2, samplerate = librosa.load(audiofile2, sr=None)
+    x_1, samplerate = librosa.load(audiofile1)
+    x_2, samplerate = librosa.load(audiofile2)
 
     fig = plt.figure(figsize=(16, 8))
 
@@ -113,7 +139,8 @@ if display:
 
     
 lines = []
-points_idx = np.int16(np.round(np.linspace(0, wp.shape[0] - 1, arrows)))
+#points_idx = np.int16(np.round(np.linspace(0, wp.shape[0] - 1, arrows)))
+points_idx = np.int16(np.round(np.linspace(0, wp.shape[0] - 1, hop_size)))
 
 
 
@@ -159,23 +186,40 @@ markers2_list = []
 sys.stderr.write("Finding markers\n")
 
 # for tp1, tp2 in zip((wp[points_idx, 0]) * hop_size, (wp[points_idx, 1]) * hop_size):
-#HBfor tp1, tp2 in wp[points_idx] * hop_size / samplerate:
-for tp1, tp2 in wp[points_idx] * float(hop_size) / samplerate:
 
-    #print("tp1: %d, tp2: %d" % (tp1,tp2))
 
+timepoints = wp[points_idx] * hop_size / samplerate
+timepoints = wp[points_idx] * 0.1
+
+
+
+for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
+    #for tp1, tp2 in wp[points_idx] * float(hop_size) / samplerate:
+
+
+    if prev_tp1 and tp1 > prev_tp1:
+        sys.stderr.write("ERROR: prev_tp1 = %s, tp1 = %s\n" % (prev_tp1, tp1))
+        sys.stderr.write("%s\n" % timepoints)
+        sys.stderr.write("%s\n" % len(timepoints))
+        sys.stderr.write("%s\n" % timepoints[-1])
+        
+        sys.exit()
+
+    
     if display:
         # get position on axis for a given index-pair
         coord1 = trans_figure.transform(ax1.transData.transform([tp1, 0]))
         coord2 = trans_figure.transform(ax2.transData.transform([tp2, 0]))
 
         # draw a line
-        line = matplotlib.lines.Line2D((coord1[0], coord2[0]),
+        redline = matplotlib.lines.Line2D((coord1[0], coord2[0]),
                                    (coord1[1], coord2[1]),
                                    transform=fig.transFigure,
                                    color='r')
+        if debug:
+            sys.stderr.write("REDLINE: tp1: %f, tp2: %f\n" % (tp1,tp2))
         #add all lines
-        #lines.append(line)
+        #lines.append(redline)
 
 
     try:
@@ -183,27 +227,34 @@ for tp1, tp2 in wp[points_idx] * float(hop_size) / samplerate:
     except:
         #marker = None
         break
-        
+
+    if debug:
+        sys.stderr.write("Looking for marker %s: prev_tp1: %s, tp1: %s\n" % (marker, prev_tp1, tp1))
+
+    
     if prev_tp1 and latest_used_tp1 and marker > prev_tp1:
         prev_tp1 = latest_used_tp1
         prev_tp2 = latest_used_tp2
 
-    if debug and marker:
-        print("prev_tp1: %s, tp1: %.2f, marker: %.2f" % (prev_tp1,tp1,marker))
 
 #    if marker and prev_tp1 and marker < prev_tp1 and marker > tp1:
-    if (marker and prev_tp1 and marker < prev_tp1 and marker > tp1) or (prev_tp1 == None and marker > tp1):
+    if (marker and prev_tp1 and marker < prev_tp1 and marker >= tp1) or (prev_tp1 == None and marker >= tp1):
         #hb special case..
         if prev_tp1 == None:
             interp = marker
         else:
             interp = interpolateTimepoint(marker, prev_tp1, prev_tp2, tp1, tp2)
 
+        if debug:
+            sys.stderr.write("prev_tp1: %s, tp1: %.2f, marker: %.2f, interp: %s\n" % (prev_tp1,tp1,marker,interp))
+            
 
         markers1_list.append(marker)
         markers2_list.append(interp)
         
-            
+
+        sys.stderr.write("%s: %f -> %f\n" % (marker_nr, marker,interp))
+        
         #hb moving print to later
         #print("%d\t%s\t%s" % (mark_index, tp2str(marker) ,tp2str(interp)))
         
@@ -212,10 +263,11 @@ for tp1, tp2 in wp[points_idx] * float(hop_size) / samplerate:
         # else:
         #     mark_index = None
         mark_index +=1
+        marker_nr -= 1
         
         if display:
             #Only add red lines for markers!
-            lines.append(line)
+            lines.append(redline)
 
             # get position on axis for a given index-pair
             coord1 = trans_figure.transform(ax1.transData.transform([marker, 0]))

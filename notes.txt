@@ -1,0 +1,246 @@
+
+#TEST 1:
+#Reduced bitrate to 160k with commands
+ffmpeg -i Schmidt_Master.mp3 -ab 160k Schmidt_Master_reduced_bitrate.mp3
+ffmpeg -i Schmidt_GP.mp3 -ab 160k Schmidt_GP_reduced_bitrate.mp3
+
+#librosa downsamples to 22050
+#n_fft = 2205
+#hop_size = 2205
+
+Works:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_2205_2205.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 2205, hop_size: 2205
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 2205, hop_size: 2205
+Aligning chroma sequences
+Saving to Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_2205_2205.npy
+Done!
+
+
+
+
+#TEST 2:
+#Original bitrate
+#librosa downsamples to 22050
+#n_fft = 2205
+#hop_size = 2205
+
+Works:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master.mp3 Schmidt/Schmidt_GP.mp3
+Loading Schmidt/Schmidt_Master.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master-Schmidt_GP_22050_2205_2205.npy
+Extracting chroma features from Schmidt/Schmidt_Master.mp3, n_fft: 2205, hop_size: 2205
+Extracting chroma features from Schmidt/Schmidt_GP.mp3, n_fft: 2205, hop_size: 2205
+Aligning chroma sequences
+Saving to Schmidt/Schmidt_Master-Schmidt_GP_22050_2205_2205.npy
+Done!
+
+
+
+
+#TEST 3:
+#Original bitrate
+#no resampling = 48000
+#n_fft = 2205
+#hop_size = 2205
+# + changed to create output filename
+
+Fails:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master.mp3 Schmidt/Schmidt_GP.mp3
+Loading Schmidt/Schmidt_Master.mp3
+samplerate 48000
+Loading Schmidt/Schmidt_GP.mp3
+samplerate 48000
+Extracting chroma features from Schmidt/Schmidt_Master.mp3, n_fft: 2205, hop_size: 2205
+Extracting chroma features from Schmidt/Schmidt_GP.mp3, n_fft: 2205, hop_size: 2205
+Aligning chroma sequences
+Traceback (most recent call last):
+  File "print_dtw_points.py", line 84, in <module>
+    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+  File "/home/harald/.local/lib/python3.6/site-packages/librosa/core/dtw.py", line 191, in dtw
+    D = np.ones(C.shape + np.array([max_0, max_1])) * np.inf
+  File "/home/harald/.local/lib/python3.6/site-packages/numpy/core/numeric.py", line 188, in ones
+    a = empty(shape, dtype, order)
+MemoryError
+
+
+
+#TEST 4
+#reduced bitrate
+#resampling
+#n_fft = 2205
+#hop_size = 600
+
+Fails:
+
+print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+/home/harald/.local/lib/python3.6/site-packages/numba/errors.py:102: UserWarning: Insufficiently recent colorama version found. Numba requires colorama >= 0.3.9
+  warnings.warn(msg)
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-e_22050_2205_600.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 2205, hop_size: 600
+/home/harald/.local/lib/python3.6/site-packages/librosa/util/utils.py:1725: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  if np.issubdtype(x.dtype, float) or np.issubdtype(x.dtype, complex):
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 2205, hop_size: 600
+Aligning chroma sequences
+Traceback (most recent call last):
+  File "print_dtw_points.py", line 100, in <module>
+    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+  File "/home/harald/.local/lib/python3.6/site-packages/librosa/core/dtw.py", line 184, in dtw
+    C = cdist(X.T, Y.T, metric=metric)
+  File "/home/harald/.local/lib/python3.6/site-packages/scipy/spatial/distance.py", line 2381, in cdist
+    dm = np.empty((mA, mB), dtype=np.double)
+MemoryError
+
+
+#TEST 5
+#reduced bitrate
+#resampling
+#n_fft = 2205
+#hop_size = 1200
+
+Fails:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_2205_1200.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 2205, hop_size: 1200
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 2205, hop_size: 1200
+Aligning chroma sequences
+Traceback (most recent call last):
+  File "print_dtw_points.py", line 100, in <module>
+    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+  File "/home/harald/.local/lib/python3.6/site-packages/librosa/core/dtw.py", line 191, in dtw
+    D = np.ones(C.shape + np.array([max_0, max_1])) * np.inf
+  File "/home/harald/.local/lib/python3.6/site-packages/numpy/core/numeric.py", line 188, in ones
+    a = empty(shape, dtype, order)
+MemoryError
+
+
+
+#TEST 6:
+#reduced bitrate
+#resampling
+#n_fft = 1000
+#hop_size = 2205
+
+#This is best so far!
+
+Works:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_1000_2205.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 1000, hop_size: 2205
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 1000, hop_size: 2205
+Aligning chroma sequences
+Saving to Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_1000_2205.npy
+Done!
+
+#TEST 7:
+#reduced bitrate
+#resampling
+#n_fft = 1000
+#hop_size = 1200
+
+Fails:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_1000_1200.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 1000, hop_size: 1200
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 1000, hop_size: 1200
+Aligning chroma sequences
+Traceback (most recent call last):
+  File "print_dtw_points.py", line 100, in <module>
+    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+  File "/home/harald/.local/lib/python3.6/site-packages/librosa/core/dtw.py", line 191, in dtw
+    D = np.ones(C.shape + np.array([max_0, max_1])) * np.inf
+  File "/home/harald/.local/lib/python3.6/site-packages/numpy/core/numeric.py", line 188, in ones
+    a = empty(shape, dtype, order)
+MemoryError
+
+
+#TEST 8:
+#reduced bitrate
+#resampling
+#n_fft = 600
+#hop_size = 1200
+
+Fails:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+/home/harald/.local/lib/python3.6/site-packages/numba/errors.py:102: UserWarning: Insufficiently recent colorama version found. Numba requires colorama >= 0.3.9
+  warnings.warn(msg)
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_600_1200.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 600, hop_size: 1200
+/home/harald/.local/lib/python3.6/site-packages/librosa/util/utils.py:1725: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  if np.issubdtype(x.dtype, float) or np.issubdtype(x.dtype, complex):
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 600, hop_size: 1200
+Aligning chroma sequences
+Traceback (most recent call last):
+  File "print_dtw_points.py", line 100, in <module>
+    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+  File "/home/harald/.local/lib/python3.6/site-packages/librosa/core/dtw.py", line 191, in dtw
+    D = np.ones(C.shape + np.array([max_0, max_1])) * np.inf
+  File "/home/harald/.local/lib/python3.6/site-packages/numpy/core/numeric.py", line 188, in ones
+    a = empty(shape, dtype, order)
+MemoryError
+
+
+#TEST 9:
+#reduced bitrate
+#resampling
+#n_fft = 4800
+#hop_size = 1200
+
+Fails:
+
+python3 print_dtw_points.py Schmidt/Schmidt_Master_reduced_bitrate.mp3 Schmidt/Schmidt_GP_reduced_bitrate.mp3
+/home/harald/.local/lib/python3.6/site-packages/numba/errors.py:102: UserWarning: Insufficiently recent colorama version found. Numba requires colorama >= 0.3.9
+  warnings.warn(msg)
+Loading Schmidt/Schmidt_Master_reduced_bitrate.mp3
+samplerate 22050
+Loading Schmidt/Schmidt_GP_reduced_bitrate.mp3
+samplerate 22050
+outfile: Schmidt/Schmidt_Master_reduced_bitrate-Schmidt_GP_reduced_bitrate_22050_4800_1200.npy
+Extracting chroma features from Schmidt/Schmidt_Master_reduced_bitrate.mp3, n_fft: 4800, hop_size: 1200
+/home/harald/.local/lib/python3.6/site-packages/librosa/util/utils.py:1725: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  if np.issubdtype(x.dtype, float) or np.issubdtype(x.dtype, complex):
+Extracting chroma features from Schmidt/Schmidt_GP_reduced_bitrate.mp3, n_fft: 4800, hop_size: 1200
+Aligning chroma sequences
+Traceback (most recent call last):
+  File "print_dtw_points.py", line 100, in <module>
+    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+  File "/home/harald/.local/lib/python3.6/site-packages/librosa/core/dtw.py", line 191, in dtw
+    D = np.ones(C.shape + np.array([max_0, max_1])) * np.inf
+  File "/home/harald/.local/lib/python3.6/site-packages/numpy/core/numeric.py", line 188, in ones
+    a = empty(shape, dtype, order)
+MemoryError

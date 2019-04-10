@@ -12,10 +12,11 @@ more?
 arguments:
 1: input audio file
 2: input audio file
-3: output filename for dtw points (.npy)
 
 example:
-python print_dtw_points.py data/Dvorak_7_Master.mp3 data/Dvorak_7_K1.mp3 data/Dvorak_7_Master-K1.npy 
+python print_dtw_points.py data/Dvorak_7_Master.mp3 data/Dvorak_7_K1.mp3 
+
+output in name generated from input files, samplerate, n_fft, hop_size
 
 
 2)
@@ -63,3 +64,16 @@ data/Dvorak_7_K1_dtw.txt
 TODO:
 The exported marker files are not readable - there are two extra bytes first, and then \0 everywhere..
 Fix (for now) by copying the text into a new file.
+
+
+
+
+
+QUICK TEST:
+
+n_fft = 4800
+hop_size = 1200
+resample = True
+
+python3 print_dtw_points.py data/sir_duke_fast.mp3 data/sir_duke_slow.mp3
+python3 find_markers_in_dtw.py data/sir_duke_fast-sir_duke_slow_22050_4800_1200.npy data/sir_duke_fast_markers.txt > data/sir_duke_slow_dtw.txt
