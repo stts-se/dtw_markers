@@ -16,7 +16,7 @@ arguments:
 
 example:
 
-`python print_dtw_points.py data/Dvorak_7_Master.mp3 data/Dvorak_7_K1.mp3 `
+`python3 print_dtw_points.py data/Dvorak_7_Master.mp3 data/Dvorak_7_K1.mp3 `
 
 output in file with name generated from input files, samplerate, n_fft, hop_size
 
@@ -34,7 +34,7 @@ output to stdout: new markers
 
 example:
 
-`python find_markers_in_dtw.py data/Dvorak_7_Master-Dvorak_7_K1-22050-2205-2205.npy data/Dvorak_7_Master.txt > data/Dvorak_7_K1_markers_dtw.txt`
+`python3 find_markers_in_dtw.py data/Dvorak_7_Master-Dvorak_7_K1-22050-2205-2205.npy data/Dvorak_7_Master.txt > data/Dvorak_7_K1_markers_dtw.txt`
 
 ### 3) convert to audacity label files
 
