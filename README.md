@@ -38,27 +38,19 @@ output:
 stderr new markers
 
 example:
-python find_markers_in_dtw.py data/Dvorak_7_Master-K1.npy data/Dvorak_7_Master.txt > data/Dvorak_7_K1_dtw.txt
+python find_markers_in_dtw.py data/Dvorak_7_Master-Dvorak_7_K1-22050-2205-2205.npy data/Dvorak_7_Master.txt > data/Dvorak_7_K1_markers_dtw.txt
 
 3)
 convert to audacity label files
 
+example:
+cat data/Dvorak_7_K1_markers_dtw.txt | python3 markers2aud_labels.py > data/Dvorak_7_K1_markers_dtw_audacity.txt
 
 4)
 compare marker files
 
 
 
-FILENAMES
-
-audio, marker, audacity label files should be named <work>_<Master|K1>(_dtw_).<txt|mp3|wav|lab> (with _dtw_ for interpolated markers, without for manually labelled)
-npy filename should reflect which two audio files are compared: for example "Dvorak 7_Master-K1.npy" (<work>_<version>-<version>.npy)
-
-data/Dvorak_7_Master.mp3
-data/Dvorak_7_K1.mp3
-data/Dvorak_7_Master-K1.npy
-data/Dvorak_7_Master.txt
-data/Dvorak_7_K1_dtw.txt
 
 
 TODO:
@@ -71,9 +63,6 @@ Fix (for now) by copying the text into a new file.
 
 QUICK TEST:
 
-n_fft = 4800
-hop_size = 1200
-resample = True
-
-python3 print_dtw_points.py data/sir_duke_fast.mp3 data/sir_duke_slow.mp3
-python3 find_markers_in_dtw.py data/sir_duke_fast-sir_duke_slow_22050_4800_1200.npy data/sir_duke_fast_markers.txt > data/sir_duke_slow_dtw.txt
+python3 print_dtw_points.py test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3
+python3 find_markers_in_dtw.py test_data/sir_duke_fast-sir_duke_slow-22050-2205-2205.npy test_data/sir_duke_fast_markers.txt > test_data/sir_duke_slow_markers_dtw.txt
+cat test_data/sir_duke_slow_markers_dtw.txt | python3 markers2aud_labels.py > test_data/sir_duke_slow_markers_dtw_audacity.txt

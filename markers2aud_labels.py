@@ -1,6 +1,9 @@
 import sys
 
-
+start_number = 1
+if len(sys.argv) > 1:
+    start_number = int(sys.argv[1])
+    
 
 nr_frames_per_second = 50.0
 
@@ -36,6 +39,8 @@ markers = readMarkers(lines)
 
 
 i = 0
+nr = start_number
 while i < len(markers):
-    print("%.2f\t%.2f\t%d" % (markers[i], markers[i], i+1))
+    print("%.2f\t%.2f\t%d" % (markers[i], markers[i], nr))
     i += 1
+    nr += 1

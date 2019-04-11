@@ -68,7 +68,7 @@ print("samplerate %d" % samplerate)
 
 
 
-outfile = "%s%s-%s_%s_%s_%s.npy" % (dir1,base1,base2,samplerate,n_fft,hop_size)
+outfile = "%s%s-%s-%s-%s-%s.npy" % (dir1,base1,base2,samplerate,n_fft,hop_size)
 print("outfile: %s" % outfile)
 out = open(outfile, "wb")
 

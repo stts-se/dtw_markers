@@ -11,17 +11,17 @@ import librosa
 import librosa.display
 
 #For extra prints
-debug = True
+debug = False
+if "-d" in sys.argv:
+    debug = True
+    sys.argv.remove("-d")
 
 
 #For display. Slow and takes a lot of memory! audiofile1 and 2 are only read if display is True
 display = False
-#audiofile1 = 'audio/Dvorak 7 Master part1.mp3'
-#audiofile2 = 'audio/Dvorak 7 K1 no markers part1.mp3'
-audiofile1 = 'data/sir_duke_fast.mp3'
-audiofile2 = 'data/sir_duke_slow.mp3'
-
-#
+if "-s" in sys.argv:
+    display = True
+    sys.argv.remove("-s")
 
 
 #Input files
@@ -36,11 +36,15 @@ else:
     samplerate = 22050.0
 
 
-m = re.search("_([0-9]+)_([0-9]+)_([0-9]+).npy$", dtw_file)
+m = re.search("(.*?/?)([^/-]+)-([^-]+)-([0-9]+)-([0-9]+)-([0-9]+).npy$", dtw_file)
 if m:
-    samplerate = float(m.group(1))
-    n_fft = float(m.group(2))
-    hop_size = float(m.group(3))
+    audiodir = m.group(1) 
+    audiofile1 = "%s%s.mp3" % (audiodir, m.group(2))
+    audiofile2 = "%s%s.mp3" % (audiodir, m.group(3))
+    sys.stderr.write("Audiodir: %s, audiofile1: %s, audiofile2: %s\n" % (audiodir, audiofile1, audiofile2))
+    samplerate = float(m.group(4))
+    n_fft = float(m.group(5))
+    hop_size = float(m.group(6))
 else:
     n_fft = 4410.0
     hop_size = 2205.0
@@ -199,11 +203,8 @@ for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
 
     if prev_tp1 and tp1 > prev_tp1:
         sys.stderr.write("ERROR: prev_tp1 = %s, tp1 = %s\n" % (prev_tp1, tp1))
-        sys.stderr.write("%s\n" % timepoints)
-        sys.stderr.write("%s\n" % len(timepoints))
-        sys.stderr.write("%s\n" % timepoints[-1])
-        
-        sys.exit()
+        sys.stderr.write("Probably because the first audio is longer than the second?\n")
+        #sys.exit()
 
     
     if display:
@@ -237,9 +238,8 @@ for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
         prev_tp2 = latest_used_tp2
 
 
-#    if marker and prev_tp1 and marker < prev_tp1 and marker > tp1:
     if (marker and prev_tp1 and marker < prev_tp1 and marker >= tp1) or (prev_tp1 == None and marker >= tp1):
-        #hb special case..
+        #hb special case.. can't interpolate if at end of file
         if prev_tp1 == None:
             interp = marker
         else:
@@ -255,13 +255,6 @@ for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
 
         sys.stderr.write("%s: %f -> %f\n" % (marker_nr, marker,interp))
         
-        #hb moving print to later
-        #print("%d\t%s\t%s" % (mark_index, tp2str(marker) ,tp2str(interp)))
-        
-        # if mark_index > 0:
-        #     mark_index = mark_index-1
-        # else:
-        #     mark_index = None
         mark_index +=1
         marker_nr -= 1
         
@@ -285,7 +278,18 @@ for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
     prev_tp1 = tp1
     prev_tp2 = tp2
     
+#In case there was an error, just copy remaining markers
+while mark_index < len(markers):
+    marker = markers[mark_index]
+    sys.stderr.write("Copying marker: %s\n" % marker)
+    interp = marker
+    markers1_list.append(marker)
+    markers2_list.append(interp)        
+    sys.stderr.write("%s: %f -> %f\n" % (marker_nr, marker,interp))
+    mark_index += 1
+    marker_nr -= 1
 
+    
 if display:
     sys.stderr.write("displaying..\n")
     
