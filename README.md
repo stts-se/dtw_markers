@@ -50,11 +50,9 @@ The original marker files are not readable - there are two extra bytes first, an
 Fix (for now) by copying the text into a new file.
 
 
-
-
-
-QUICK TEST:
-
+### QUICK TEST:
+```
 python3 print_dtw_points.py test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3
 python3 find_markers_in_dtw.py test_data/sir_duke_fast-sir_duke_slow-22050-2205-2205.npy test_data/sir_duke_fast_markers.txt > test_data/sir_duke_slow_markers_dtw.txt
 cat test_data/sir_duke_slow_markers_dtw.txt | python3 markers2aud_labels.py > test_data/sir_duke_slow_markers_dtw_audacity.txt
+```
