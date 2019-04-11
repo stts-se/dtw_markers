@@ -1,3 +1,22 @@
+## dtw_markers.py
+
+```
+USAGE: python3 dtw_markers.py MASTER_AUDIO MASTER_MARKERS SECONDARY_AUDIO_FILE(S)
+EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast.mp3 test_data/sir_duke_fast_markers.txt test_data/sir_duke_slow.mp3
+```
+
+```
+-n: Don't overwrite dtw files (otherwise you will be asked, press y+enter for yes, any other key + enter for no)
+-v: verbose output
+```
+
+
+
+
+
+
+
+
 ### 1) Extract chroma features, compute dtw points and write to file
 
 print_dtw_points.py

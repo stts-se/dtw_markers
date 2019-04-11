@@ -1,9 +1,15 @@
 import sys
 
+
+debug = False
+if "-d" in sys.argv:
+    debug = True
+    sys.argv.remove("-d")
+    
+
 marker_file1 = sys.argv[1]
 marker_file2 = sys.argv[2]
 
-debug = False
 
 
 nr_frames_per_second = 50.0
