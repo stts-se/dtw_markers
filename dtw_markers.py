@@ -49,6 +49,9 @@ def main():
     writeAudacityLabels(master_markers, master_audacity_file)
     debug("Read %d markers" % len(master_markers))
 
+    #Reverse list before getting secondary markers
+    master_markers.reverse()
+    debug("markers reversed: %s" % master_markers)
     
     for secondary_audio_file in secondary_audio_files:
 
@@ -122,6 +125,7 @@ def loadDTW(filename):
 nr_frames_per_second = 50.0
 def writeMarkersAndAudacityLabels(dtw, master_markers, secondary_marker_file, secondary_audacity_file, hop_size, samplerate):
     secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate)
+    debug("Second secondary marker: %s" % secondary_markers[1])
     writeMarkers(secondary_markers, secondary_marker_file)
     writeAudacityLabels(secondary_markers, secondary_audacity_file)
 
@@ -133,14 +137,17 @@ import io
     
 def loadMarkers(filename):
 
-    cmd = "dos2unix '%s'" % filename
-    print(cmd)
-    os.system(cmd)
+    #cmd = "dos2unix '%s'" % filename
+    #print(cmd)
+    #os.system(cmd)
     
     markers = []
     lines = io.open(filename).readlines()
     for line in lines:
         line = line.strip()
+        #debug(line)
+        line = re.sub("\0", "", line)
+        #debug(line)
 
         rm = re.match("^.*\s([0-9]{2}):([0-9]{2}):([0-9]{2}):([0-9]{2}).*$", line)
         if rm:
@@ -197,7 +204,8 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
     lines = []
     points_idx = numpy.int16(numpy.round(numpy.linspace(0, wp.shape[0] - 1, hop_size)))
 
-    markers.reverse()
+    #markers.reverse()
+    #debug("markers reversed: %s" % markers)
 
     mark_index = 0
     marker_nr = len(markers)
@@ -264,7 +272,9 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
         mark_index += 1
         marker_nr -= 1
 
+    debug("markers2_list: %s" % markers2_list)
     markers2_list.reverse()
+    debug("markers2_list reversed: %s" % markers2_list)
     return markers2_list
 
     
