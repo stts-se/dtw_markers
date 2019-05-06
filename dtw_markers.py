@@ -36,6 +36,7 @@ def main():
     #directory = m.group(1)
     master_audio_base = m.group(2)
     master_audio = None
+    master_audio_loaded = False
     
     n_fft = 2205
     hop_size = 2205
@@ -57,8 +58,9 @@ def main():
 
         dtw_file = "%s%s-%s-%s-%s-%s.npy" % (directory, master_audio_base, secondary_audio_base, samplerate, n_fft, hop_size)
         if allowOverwriteDTW and checkWriteDTW(dtw_file):
-            if master_audio == None:
+            if not master_audio_loaded:
                 master_audio = loadAudio(master_audio_file, resample)
+                master_audio_loaded = True
             secondary_audio = loadAudio(secondary_audio_file, resample)
             dtw = getDTW(master_audio, secondary_audio, samplerate, n_fft, hop_size)
             writeDTW(dtw, dtw_file)
@@ -127,9 +129,46 @@ def writeMarkersAndAudacityLabels(dtw, master_markers, secondary_marker_file, se
 
 
 
-    
+import io    
     
 def loadMarkers(filename):
+
+    cmd = "dos2unix '%s'" % filename
+    print(cmd)
+    os.system(cmd)
+    
+    markers = []
+    lines = io.open(filename).readlines()
+    for line in lines:
+        line = line.strip()
+
+        rm = re.match("^.*\s([0-9]{2}):([0-9]{2}):([0-9]{2}):([0-9]{2}).*$", line)
+        if rm:
+            #(h,m,s,ms) = line.split(":")
+            h = rm.group(1)
+            m = rm.group(2)
+            s = rm.group(3)
+            ms = rm.group(4)
+        else:
+            continue
+            
+        #print(ms)
+        
+        #last field in marker isn't ms but frame. If fifty frames/s use 0.02
+        #marker = int(ms)*100/nr_frames_per_second
+        marker = int(ms)/nr_frames_per_second
+        #print(marker)
+        
+        if int(s) > 0:
+            marker = marker+int(s)
+        if int(m) > 0:
+            marker = marker+int(m)*60
+        if int(h) > 0:
+            marker = marker+int(h)*60*60
+        markers.append(marker)
+    return markers
+
+def loadMarkersOLD(filename):
     markers = []
     lines = open(filename).readlines()
     for line in lines:
