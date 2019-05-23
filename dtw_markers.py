@@ -28,8 +28,23 @@ def main():
         verbose = True
         sys.argv.remove("-v")
     
-    master_audio_file = sys.argv[1]
-    master_marker_file = sys.argv[2]
+    master_marker_file = sys.argv[1]
+
+    debug("Reading markers from %s" % master_marker_file)
+    master_markers = loadMarkers(master_marker_file)
+    master_audacity_file = re.sub("\.txt$", "_audacity.txt", master_marker_file)
+    debug("Writing markers to %s" % master_audacity_file)
+    writeAudacityLabels(master_markers, master_audacity_file)
+    master_srt_file = re.sub("\.txt$", ".srt", master_marker_file)
+    debug("Writing markers to %s" % master_srt_file)
+    writeSrtFile(master_markers, master_srt_file)
+    debug("Done processing %d markers" % len(master_markers))
+    print("Written output files: %s, %s" % (master_audacity_file, master_srt_file))
+
+    if len(sys.argv) == 2:
+        sys.exit(1)
+        
+    master_audio_file = sys.argv[2]
     secondary_audio_files = sys.argv[3:]
 
     m = re.match("(.*?/?)([^/.]+).mp3", master_audio_file)
@@ -43,12 +58,7 @@ def main():
     samplerate = 22050
     resample = True
 
-    debug("Reading markers from %s" % master_marker_file)
-    master_markers = loadMarkers(master_marker_file)
-    master_audacity_file = re.sub("\.txt$", "_audacity.txt", master_marker_file)
-    writeAudacityLabels(master_markers, master_audacity_file)
-    debug("Read %d markers" % len(master_markers))
-
+    
     #Reverse list before getting secondary markers
     master_markers.reverse()
     debug("markers reversed: %s" % master_markers)
@@ -70,9 +80,7 @@ def main():
         else:
             dtw = loadDTW(dtw_file)
 
-        secondary_marker_file = "%s%s_markers_dtw.txt" % (directory, secondary_audio_base)
-        secondary_audacity_file = "%s%s_markers_dtw_audacity.txt" % (directory, secondary_audio_base)
-        writeMarkersAndAudacityLabels(dtw, master_markers, secondary_marker_file, secondary_audacity_file, hop_size, samplerate)
+        writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate)
 
         
 def checkWriteDTW(filename):
@@ -123,12 +131,18 @@ def loadDTW(filename):
 
 
 nr_frames_per_second = 50.0
-def writeMarkersAndAudacityLabels(dtw, master_markers, secondary_marker_file, secondary_audacity_file, hop_size, samplerate):
+def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate):
+    secondary_marker_file = "%s%s_markers_dtw.txt" % (directory, secondary_audio_base)
+    secondary_audacity_file = "%s%s_markers_dtw_audacity.txt" % (directory, secondary_audio_base)
+    secondary_srt_file = "%s%s_markers_dtw.srt" % (directory, secondary_audio_base)
+
     secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate)
-    debug("Second secondary marker: %s" % secondary_markers[1])
+    debug("Second secondary marker: %s %s" % secondary_markers[1])
     writeMarkers(secondary_markers, secondary_marker_file)
     writeAudacityLabels(secondary_markers, secondary_audacity_file)
+    writeSrtFile(secondary_markers, secondary_srt_file)
 
+    print("Written output files: %s, %s, %s" % (secondary_marker_file, secondary_audacity_file, secondary_srt_file))
 
 
 
@@ -143,58 +157,46 @@ def loadMarkers(filename):
     
     markers = []
     lines = io.open(filename).readlines()
+    i = 1
     for line in lines:
         line = line.strip()
         #debug(line)
         line = re.sub("\0", "", line)
         #debug(line)
 
-        rm = re.match("^.*\s([0-9]{2}):([0-9]{2}):([0-9]{2}):([0-9]{2}).*$", line)
+        rm = re.match("^.*([0-9]{2}):([0-9]{2}):([0-9]{2}):([0-9]{2}).*$", line)
+        rm_aud = re.match("^([0-9.]+)\s+([0-9.]+)\s+(.+)$", line)
         if rm:
             #(h,m,s,ms) = line.split(":")
             h = rm.group(1)
             m = rm.group(2)
             s = rm.group(3)
             ms = rm.group(4)
+
+            #print(ms)
+        
+            #last field in marker isn't ms but frame. If fifty frames/s use 0.02
+            #marker = int(ms)*100/nr_frames_per_second
+            marker = int(ms)/nr_frames_per_second
+            #print(marker)
+            
+            if int(s) > 0:
+                marker = marker+int(s)
+            if int(m) > 0:
+                marker = marker+int(m)*60
+            if int(h) > 0:
+                marker = marker+int(h)*60*60
+
+            label = i+1
+
+        elif rm_aud:
+            marker = float(rm_aud.group(1))
+            label = rm_aud.group(3)
         else:
             continue
             
-        #print(ms)
-        
-        #last field in marker isn't ms but frame. If fifty frames/s use 0.02
-        #marker = int(ms)*100/nr_frames_per_second
-        marker = int(ms)/nr_frames_per_second
-        #print(marker)
-        
-        if int(s) > 0:
-            marker = marker+int(s)
-        if int(m) > 0:
-            marker = marker+int(m)*60
-        if int(h) > 0:
-            marker = marker+int(h)*60*60
-        markers.append(marker)
-    return markers
-
-def loadMarkersOLD(filename):
-    markers = []
-    lines = open(filename).readlines()
-    for line in lines:
-        line = line.strip()
-        (h,m,s,ms) = line.split(":")
-        #print(ms)
-        
-        #last field in marker isn't ms but frame. If fifty frames/s use 0.02
-        #marker = int(ms)*100/nr_frames_per_second
-        marker = int(ms)/nr_frames_per_second
-        #print(marker)
-        
-        if int(s) > 0:
-            marker = marker+int(s)
-        if int(m) > 0:
-            marker = marker+int(m)*60
-        if int(h) > 0:
-            marker = marker+int(h)*60*60
-        markers.append(marker)
+        markers.append( (label, marker) )
+        i += 1
     return markers
 
 
@@ -224,7 +226,7 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
             sys.stderr.write("Probably because the first audio is longer than the second?\n")
             #sys.exit()
         try:
-            marker = markers[mark_index]
+            (label, marker) = markers[mark_index]
         except:
             #marker = None
             break
@@ -246,11 +248,11 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
 
             debug("prev_tp1: %s, tp1: %.2f, marker: %.2f, interp: %s" % (prev_tp1,tp1,marker,interp))
             
-            markers1_list.append(marker)
-            markers2_list.append(interp)
+            markers1_list.append( (label, marker) )
+            markers2_list.append( (label, interp) )
         
 
-            debug("%s: %f -> %f" % (marker_nr, marker,interp))
+            debug("%s: %s\t%f -> %f" % (marker_nr, label, marker,interp))
         
             mark_index +=1
             marker_nr -= 1
@@ -263,11 +265,11 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
     
     #In case there was an error, just copy remaining markers
     while mark_index < len(markers):
-        marker = markers[mark_index]
-        debug("Copying marker: %s" % marker)
+        (label, marker) = markers[mark_index]
+        debug("Copying marker: %s %s" % (label, marker))
         interp = marker
-        markers1_list.append(marker)
-        markers2_list.append(interp)        
+        markers1_list.append((label, marker))
+        markers2_list.append((label, interp))
         debug("%s: %f -> %f" % (marker_nr, marker,interp))
         mark_index += 1
         marker_nr -= 1
@@ -279,19 +281,50 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
 
     
 def writeMarkers(markers, marker_file):
+    debug("Writing markers to %s" % marker_file)
     fh = open(marker_file, "w")
     i = 0
     while i < len(markers):
-        marker = markers[i]
+        (_, marker) = markers[i]
         fh.write("%s\n" % tp2str(marker))
         i += 1
     fh.close()
 
 def writeAudacityLabels(markers, audacity_file):
+    debug("Writing audacity labels to %s" % audacity_file)
     fh = open(audacity_file, "w")
     i = 0
     while i < len(markers):
-        fh.write("%.2f\t%.2f\t%d\n" % (markers[i], markers[i], i+1))
+        (label, tp) = markers[i]
+        fh.write("%.2f\t%.2f\t%s\n" % (tp, tp, label))
+        i += 1
+    fh.close()
+
+def writeSrtFile(markers, srt_file):
+    debug("Writing srt to %s" % srt_file)
+
+    fh = open(srt_file, "w")
+    i = 0
+    while i < len(markers):
+
+        (label, tp1) = markers[i]
+        m1 = tp1/60
+        s1 = tp1%60
+        h1 = m1/60
+        m1 = m1%60
+
+        try:
+            (_, tp2) = markers[i+1]
+        except:
+            tp2 = tp1+1
+
+        m2 = tp2/60
+        s2 = tp2%60
+        h2 = m2/60
+        m2 = m2%60
+
+            
+        fh.write("\n%d\n%02d:%02d:%.3f -> %02d:%02d:%.3f\n%s\n" % (i+1, h1, m1, s1, h2, m2, s2, label))
         i += 1
     fh.close()
 
@@ -334,9 +367,10 @@ def debug(msg):
         
 
 if __name__ == "__main__":
-    if len(sys.argv) > 3:
+    if len(sys.argv) > 1:
         main()
     else:
-        sys.stderr.write("USAGE: python3 dtw_markers.py MASTER_AUDIO MASTER_MARKERS SECONDARY_AUDIO ..\n")
-        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast.mp3 test_data/sir_duke_fast_markers.txt test_data/sir_duke_slow.mp3\n")
+        sys.stderr.write("USAGE: python3 dtw_markers.py MASTER_MARKERS (MASTER_AUDIO SECONDARY_AUDIO ..)\n")
+        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt\n")
+        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3\n")
         sys.exit()

@@ -1,8 +1,15 @@
 ## dtw_markers.py
 
 ```
-USAGE: python3 dtw_markers.py MASTER_AUDIO MASTER_MARKERS SECONDARY_AUDIO_FILE(S)
-EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast.mp3 test_data/sir_duke_fast_markers.txt test_data/sir_duke_slow.mp3
+USAGE: python3 dtw_markers.py MASTER_MARKERS (MASTER_AUDIO SECONDARY_AUDIO_FILE ..)
+EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt
+EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3
+
+MASTER_MARKERS can be in "marker" or audacity format.
+MASTER_MARKERS are converted to audacity and srt format.
+
+If two or more soundfiles are given, they are aligned by dtw and marker files for secondary audio is written, in "marker", audacity, and srt formats"
+
 ```
 
 ```
@@ -75,3 +82,14 @@ python3 print_dtw_points.py test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.
 python3 find_markers_in_dtw.py test_data/sir_duke_fast-sir_duke_slow-22050-2205-2205.npy test_data/sir_duke_fast_markers.txt > test_data/sir_duke_slow_markers_dtw.txt
 cat test_data/sir_duke_slow_markers_dtw.txt | python3 markers2aud_labels.py > test_data/sir_duke_slow_markers_dtw_audacity.txt
 ```
+
+
+
+TODO:
+läs audacity-labelfil
+ta namn på marker från aud
+skriv ut srt (från punkt till nästa punkt)
+om ingen ljudfil i input, läs in label-fil och skriv ut ny aud-label och srt (= konvertera)
+
+
+Ändrat anrop: först marker-fil, sedan masterljud, sedan mer ljud
