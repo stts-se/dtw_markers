@@ -324,7 +324,7 @@ def writeSrtFile(markers, srt_file):
         m2 = m2%60
 
             
-        fh.write("\n%d\n%02d:%02d:%.3f -> %02d:%02d:%.3f\n%s\n" % (i+1, h1, m1, s1, h2, m2, s2, label))
+        fh.write("\n%d\n%02d:%02d:%.3f --> %02d:%02d:%.3f\n%s\n" % (i+1, h1, m1, s1, h2, m2, s2, label))
         i += 1
     fh.close()
 
