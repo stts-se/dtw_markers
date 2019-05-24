@@ -2,7 +2,13 @@ import sys,re
 
 
 editsfile = sys.argv[1]
-outfile = re.sub(".txt$",".srt", editsfile)
+if editsfile.endswith(".txt"):
+    outfile = re.sub(".txt$",".srt", editsfile)
+else:
+    outfile = editsfile+".srt"
+
+print("%s --> %s" % (editsfile, outfile))
+
 lines = open(editsfile).readlines()
 out = open(outfile, "w")
 
