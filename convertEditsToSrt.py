@@ -2,7 +2,10 @@ import sys,re
 
 
 editsfile = sys.argv[1]
+outfile = re.sub(".txt$",".srt", editsfile)
 lines = open(editsfile).readlines()
+out = open(outfile, "w")
+
 i = 1
 for line in lines:
     #00:00:00:00	00:00:36:00	K02
@@ -32,8 +35,8 @@ for line in lines:
     ms1 = int(f1)*(100/framesPerSecond)
     ms2 = int(f2)*(100/framesPerSecond)
 
-    print("""%d
+    out.write("""%d
 %s:%s:%s.%02d --> %s:%s:%s.%02d
-%s\n""" % (i,h1,m1,s1,ms1,h2,m2,s2,ms2,text))
+%s\n\n""" % (i,h1,m1,s1,ms1,h2,m2,s2,ms2,text))
     i += 1
     
