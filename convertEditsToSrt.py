@@ -32,9 +32,8 @@ for line in lines:
     ms1 = int(f1)*(100/framesPerSecond)
     ms2 = int(f2)*(100/framesPerSecond)
 
-    print("""
-%d
+    print("""%d
 %s:%s:%s.%02d --> %s:%s:%s.%02d
-%s""" % (i,h1,m1,s1,ms1,h2,m2,s2,ms2,text))
+%s\n""" % (i,h1,m1,s1,ms1,h2,m2,s2,ms2,text))
     i += 1
     
