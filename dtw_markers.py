@@ -72,9 +72,9 @@ def main():
         dtw_file = "%s%s-%s-%s-%s-%s.npy" % (directory, master_audio_base, secondary_audio_base, samplerate, n_fft, hop_size)
         if allowOverwriteDTW and checkWriteDTW(dtw_file):
             if not master_audio_loaded:
-                master_audio = loadAudio(master_audio_file, resample)
+                (master_audio, samplerate) = loadAudio(master_audio_file, resample)
                 master_audio_loaded = True
-            secondary_audio = loadAudio(secondary_audio_file, resample)
+            (secondary_audio, secondary_samplerate) = loadAudio(secondary_audio_file, resample)
             dtw = getDTW(master_audio, secondary_audio, samplerate, n_fft, hop_size)
             writeDTW(dtw, dtw_file)
         else:
@@ -102,7 +102,7 @@ def loadAudio(filename, resample=True):
     else:
         audio, samplerate = librosa.load(filename, sr=None)
     debug("samplerate %d" % samplerate)
-    return audio
+    return (audio, samplerate)
 
 def getDTW(x_1, x_2, samplerate, n_fft, hop_size):
     print("Getting chroma sequences")
@@ -164,7 +164,7 @@ def loadMarkers(filename):
         line = re.sub("\0", "", line)
         #debug(line)
 
-        rm = re.match("^.*([0-9]{2}):([0-9]{2}):([0-9]{2}):([0-9]{2}).*$", line)
+        rm = re.match("^.*([0-9]{2}):([0-9]{2}):([0-9]{2}):([0-9]{2})\s*(.*)\s*$", line)
         rm_aud = re.match("^([0-9.]+)\s+([0-9.]+)\s+(.+)$", line)
         if rm:
             #(h,m,s,ms) = line.split(":")
@@ -173,6 +173,8 @@ def loadMarkers(filename):
             s = rm.group(3)
             ms = rm.group(4)
 
+            label = rm.group(5).strip()
+            
             #print(ms)
         
             #last field in marker isn't ms but frame. If fifty frames/s use 0.02
@@ -187,7 +189,10 @@ def loadMarkers(filename):
             if int(h) > 0:
                 marker = marker+int(h)*60*60
 
-            label = i+1
+            if label == "":                
+                #HB why +1?
+                #label = i+1
+                label = i
 
         elif rm_aud:
             marker = float(rm_aud.group(1))
