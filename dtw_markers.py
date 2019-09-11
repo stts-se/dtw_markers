@@ -148,6 +148,8 @@ def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_s
     secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate)
     #debug("Second secondary marker: %s %s" % secondary_markers[1])
 
+    writeAudacityLabels(secondary_markers, secondary_audacity_file)
+    
     if writeSrt:
         writeMarkers(secondary_markers, secondary_marker_file)
         writeSrtFile(secondary_markers, secondary_srt_file)
