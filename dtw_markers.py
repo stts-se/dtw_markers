@@ -17,6 +17,10 @@ import librosa, numpy
 verbose = False
 allowOverwriteDTW = True
 
+
+writeSrt = False
+
+
 def main():
     global verbose, allowOverwriteDTW
 
@@ -35,11 +39,16 @@ def main():
     master_audacity_file = re.sub("\.txt$", "_audacity.txt", master_marker_file)
     debug("Writing markers to %s" % master_audacity_file)
     writeAudacityLabels(master_markers, master_audacity_file)
-    master_srt_file = re.sub("\.txt$", ".srt", master_marker_file)
-    debug("Writing markers to %s" % master_srt_file)
-    writeSrtFile(master_markers, master_srt_file)
+    if writeSrt:
+        master_srt_file = re.sub("\.txt$", ".srt", master_marker_file)
+        debug("Writing markers to %s" % master_srt_file)
+        writeSrtFile(master_markers, master_srt_file)
+        print("Written output files: %s, %s" % (master_audacity_file, master_srt_file))
+    else:
+        print("Written output file: %s" % (master_audacity_file))
+
+
     debug("Done processing %d markers" % len(master_markers))
-    print("Written output files: %s, %s" % (master_audacity_file, master_srt_file))
 
     if len(sys.argv) == 2:
         sys.exit(1)
@@ -137,12 +146,14 @@ def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_s
     secondary_srt_file = "%s%s_markers_dtw.srt" % (directory, secondary_audio_base)
 
     secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate)
-    debug("Second secondary marker: %s %s" % secondary_markers[1])
-    writeMarkers(secondary_markers, secondary_marker_file)
-    writeAudacityLabels(secondary_markers, secondary_audacity_file)
-    writeSrtFile(secondary_markers, secondary_srt_file)
+    #debug("Second secondary marker: %s %s" % secondary_markers[1])
 
-    print("Written output files: %s, %s, %s" % (secondary_marker_file, secondary_audacity_file, secondary_srt_file))
+    if writeSrt:
+        writeMarkers(secondary_markers, secondary_marker_file)
+        writeSrtFile(secondary_markers, secondary_srt_file)
+        print("Written output files: %s, %s, %s" % (secondary_marker_file, secondary_audacity_file, secondary_srt_file))
+    else:
+        print("Written output file: %s" % (secondary_audacity_file))
 
 
 
