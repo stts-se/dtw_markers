@@ -1,10 +1,11 @@
 import sys, os, re
 import librosa, numpy
+import soundfile as sf
 
 #Main script for dtw_markers
 #Input:
-#Master audio file
 #Master marker file
+#Master audio file
 #Secondary audio files
 
 #For each secondary audio file:
@@ -19,6 +20,8 @@ allowOverwriteDTW = True
 
 
 writeSrt = False
+
+useLibsndfile = True
 
 
 def main():
@@ -56,7 +59,8 @@ def main():
     master_audio_file = sys.argv[2]
     secondary_audio_files = sys.argv[3:]
 
-    m = re.match("(.*?/?)([^/.]+).mp3", master_audio_file)
+    debug("master_audio_file: %s" % master_audio_file)
+    m = re.match("(.*?/?)([^/.]+).(mp3|wav)", master_audio_file)
     #directory = m.group(1)
     master_audio_base = m.group(2)
     master_audio = None
@@ -74,7 +78,9 @@ def main():
     
     for secondary_audio_file in secondary_audio_files:
 
-        m = re.match("(.*?/?)([^/.]+).mp3", secondary_audio_file)
+        debug("secondary_audio_file: %s" % secondary_audio_file)
+        
+        m = re.match("(.*?/?)([^/.]+).(mp3|wav)", secondary_audio_file)
         directory = m.group(1)
         secondary_audio_base = m.group(2)
 
@@ -106,12 +112,27 @@ def checkWriteDTW(filename):
 
 def loadAudio(filename, resample=True):
     print("Loading %s" % filename)
+
+    if useLibsndfile:
+        return loadAudioWithLibsndfile(filename, resample)
+
     if resample:
         audio, samplerate = librosa.load(filename)
     else:
         audio, samplerate = librosa.load(filename, sr=None)
     debug("samplerate %d" % samplerate)
     return (audio, samplerate)
+
+
+def loadAudioWithLibsndfile(filename, resample=True):
+    data, samplerate = sf.read(filename, dtype='float32')
+    data = data.T
+    if resample:
+        data_22k = librosa.resample(data, samplerate, 22050)
+        return (data_22k, samplerate)
+    return (data, samplerate)
+
+
 
 def getDTW(x_1, x_2, samplerate, n_fft, hop_size):
     print("Getting chroma sequences")

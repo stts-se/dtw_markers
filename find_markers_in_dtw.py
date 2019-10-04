@@ -35,7 +35,7 @@ if len(sys.argv) > 3:
 else:
     samplerate = 22050.0
 
-
+1
 m = re.search("(.*?/?)([^/-]+)-([^-]+)-([0-9]+)-([0-9]+)-([0-9]+).npy$", dtw_file)
 if m:
     audiodir = m.group(1) 
@@ -58,22 +58,33 @@ sys.stderr.write("SETTINGS: samplerate: %s, n_fft: %s, hop_size: %s\n" % (sample
 def readMarkers(filename):
     markers = []
     lines = open(filename).readlines()
-    for line in lines:
+    for line in lines[1:]:
         line = line.strip()
-        (h,m,s,ms) = line.split(":")
-        #print(ms)
+
+        lm = re.search("Brahms 2 Sats 1 - REF.txt\s+(\S+)", line)
+        lm2 = re.search("^(\S+)", line)
+
         
-        #last field in marker isn't ms but frame. If fifty frames/s use 0.02
-        #marker = int(ms)*100/nr_frames_per_second
-        marker = int(ms)/nr_frames_per_second
-        #print(marker)
+        if lm:
+            time = lm.group(1)
         
-        if int(s) > 0:
-            marker = marker+int(s)
-        if int(m) > 0:
-            marker = marker+int(m)*60
-        if int(h) > 0:
-            marker = marker+int(h)*60*60
+            (h,m,s,ms) = time.split(":")
+            #print(ms)
+        
+            #last field in marker isn't ms but frame. If fifty frames/s use 0.02
+            #marker = int(ms)*100/nr_frames_per_second
+            marker = int(ms)/nr_frames_per_second
+            #print(marker)
+        
+            if int(s) > 0:
+                marker = marker+int(s)
+            if int(m) > 0:
+                marker = marker+int(m)*60
+            if int(h) > 0:
+                marker = marker+int(h)*60*60
+
+        elif lm2:
+            marker = float(lm2.group(1))
         markers.append(marker)
 
         #print("Line: %s\nMarker: %s" % (line, marker))
@@ -254,7 +265,10 @@ for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
         
 
         sys.stderr.write("%s: %f -> %f\n" % (marker_nr, marker,interp))
-        
+        if interp < 0:
+            interp = 0.0
+            sys.stderr.write("%s: %f -> %f\n" % (marker_nr, marker,interp))
+
         mark_index +=1
         marker_nr -= 1
         
