@@ -15,8 +15,8 @@ import librosa, numpy
 #Print Secondary marker file and audacity label file
 
 
-verbose = False
-#verbose = True
+#verbose = False
+verbose = True
 
 allowOverwriteDTW = True
 
@@ -27,6 +27,9 @@ writeSrt = False
 def main():
     global verbose, allowOverwriteDTW
 
+    #HB 200506
+    global master_audio, secondary_audio, samplerate
+    
     if "-n" in sys.argv:
         allowOverwriteDTW = False
         sys.argv.remove("-n")
@@ -155,7 +158,10 @@ def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_s
     secondary_srt_file = "%s%s_markers_dtw.srt" % (directory, secondary_audio_base)
 
     secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate, duration)
-    #debug("Second secondary marker: %s %s" % secondary_markers[1])
+
+    #HB 200506 Experiment: try to loop through the markers and do dtw with higher resolution for each marker triplet, modifying the location of the middle marker
+    secondary_markers = experimental_correctMarkers(master_markers, secondary_markers)
+    
 
     writeAudacityLabels(secondary_markers, secondary_audacity_file)
     
@@ -168,11 +174,66 @@ def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_s
 
 
 
+#HB 200506 Experiment: try to loop through the markers and do dtw with higher resolution for each marker triplet, modifying the location of the middle marker
+def experimental_correctMarkers(master_markers, secondary_markers):
+    debug("experimental_correctMarkers: len(master_audio): %s, len(secondary_audio): %s, len(master_markers): %s, len(secondary_markers): %s, samplerate: %s" % (len(master_audio), len(secondary_audio), len(master_markers), len(secondary_markers), samplerate))
+
+    master_markers.reverse()
+    
+    #debug("master_markers: %s" % master_markers)
+    #debug("secondary_markers: %s" % secondary_markers)
+
+
+    
+    method = "percent"
+    #DTW method: extract audio between markers p and n, get dtw, find correspondance for marker c
+    if method == "dtw":
+        pass
+    
+    #Percent method: find marker c as percentage of distance between p and n in master, set c as same percentage of distance between p and n in secondary (IF current c_sec differs from that by more than a limit..)
+    if method == "percent":
+        new_secondary_markers = []
+        limit = 0.1
+        i = 0
+        while i+2 < len(master_markers):
+            #debug("pm: (%s, %s)" % master_markers[i])
+            #print(secondary_markers[i])
+            #debug("ps: (%s, %s)" % secondary_markers[i])
+            
+            [(_,pm), (_,cm), (_,nm)] = master_markers[i:i+3]  
+            [(plabel,ps), (clabel,cs), (_,ns)] = secondary_markers[i:i+3]
+
+            #Where is current master marker?
+            perc = (cm-pm)/(nm-pm)
+            
+            #Proposed secondary marker in the "same" position
+            cs2 = round(((cs-ps)*perc)+ps, 2)
+            
+            #if difference between previously set cs and proposed cs2 is high enough, replace
+            perc_cs = (cs-ps)/(ns-ps)
+            perc_cs2 = (cs2-ps)/(ns-ps)
+            diff = abs(perc_cs-perc_cs2)
+            if diff > limit:
+                debug("cs: %s, cs2: %s, diff: %s, limit: %s" % (cs, cs2, diff, limit))
+                secondary_markers[i+1] = (clabel, cs2)
+            new_secondary_markers.append((plabel, ps))
+            i += 1
+
+        #copy remaining markers
+        new_secondary_markers.extend(secondary_markers[i:])
+        secondary_markers = new_secondary_markers
+        debug("Returning: %s" % secondary_markers)
+    
+    return secondary_markers
+
+
+        
 
 import io    
     
 def loadMarkers(filename):
 
+    #No longer necessary? 
     #cmd = "dos2unix '%s'" % filename
     #print(cmd)
     #os.system(cmd)
@@ -233,6 +294,7 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate, duration):
     lines = []
     points_idx = numpy.int16(numpy.round(numpy.linspace(0, wp.shape[0] - 1, hop_size)))
 
+    #Markers are reversed before calling this function - we're going backwards through the files
     #markers.reverse()
     #debug("markers reversed: %s" % markers)
 
@@ -243,15 +305,18 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate, duration):
     prev_tp2 = None
     latest_used_tp1 = None
     latest_used_tp2 = None
-    markers1_list = []
+    #HB 200506 markers1_list = []
     markers2_list = []
 
     debug("Finding markers")
+    #tp1 is timepoint in first audio (master), tp2 is corresponding timepoint in second audio
     for tp1, tp2 in wp[points_idx] * hop_size / samplerate:
         if prev_tp1 and tp1 > prev_tp1:
             sys.stderr.write("ERROR: prev_tp1 = %s, tp1 = %s\n" % (prev_tp1, tp1))
             sys.stderr.write("Probably because the first audio is longer than the second?\n")
             #sys.exit()
+
+        #Get markers until the index doesn't exist, then break loop
         try:
             (label, marker) = markers[mark_index]
         except:
@@ -273,9 +338,9 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate, duration):
             else:
                 interp = interpolateTimepoint(marker, prev_tp1, prev_tp2, tp1, tp2)
 
-            debug("prev_tp1: %s, tp1: %.2f, marker: %.2f, interp: %s" % (prev_tp1,tp1,marker,interp))
+            debug("prev_tp1: %s, tp1: %.2f, marker: %.2f, prev_tp2: %s, tp2: %s, interp: %s" % (prev_tp1, tp1, marker, prev_tp2, tp2, interp))
             
-            markers1_list.append( (label, marker) )
+            #HB 200506 markers1_list.append( (label, marker) )
             markers2_list.append( (label, interp) )
         
 
@@ -295,7 +360,7 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate, duration):
         (label, marker) = markers[mark_index]
         debug("Copying marker: %s %s" % (label, marker))
         interp = marker
-        markers1_list.append((label, marker))
+        #HB 200506 markers1_list.append((label, marker))
         markers2_list.append((label, interp))
         debug("%s: %f -> %f" % (marker_nr, marker,interp))
         mark_index += 1
