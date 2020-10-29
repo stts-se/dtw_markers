@@ -2,6 +2,7 @@ import sys, os, re
 import librosa, numpy
 import soundfile as sf
 
+
 #Main script for dtw_markers
 #Input:
 #Master marker file
@@ -23,19 +24,56 @@ writeSrt = False
 
 useLibsndfile = True
 
+gui = False
 
+if not gui:
+    import argparse
+    def Gooey(func):
+        return func
+else:
+    from gooey import Gooey
+    from gooey import GooeyParser
+    
+
+
+@Gooey
 def main():
     global verbose, allowOverwriteDTW
 
-    if "-n" in sys.argv:
-        allowOverwriteDTW = False
-        sys.argv.remove("-n")
+    if gui:
+        parser = GooeyParser()   
+        parser.add_argument('master_marker_file', widget="FileChooser")    
+        parser.add_argument('master_audio_file', widget="FileChooser")    
+        parser.add_argument('secondary_audio_file', nargs="*", widget="FileChooser")    
+    else:
+        parser = argparse.ArgumentParser()   
+        parser.add_argument('master_marker_file')    
+        parser.add_argument('master_audio_file')    
+        parser.add_argument('secondary_audio_file', nargs="*")    
 
-    if "-v" in sys.argv:
-        verbose = True
-        sys.argv.remove("-v")
+    parser.add_argument('-n',action='store_false',dest='allowOverwriteDTW', help="Allow overwrite DTW file. Default: True")    
+    parser.add_argument('-v',action='store_true',dest='verbose', help="Verbose output. Default: False")    
+
+    args = parser.parse_args()
+
+
+    #if "-n" in sys.argv:
+    #    allowOverwriteDTW = False
+    #    sys.argv.remove("-n")
+
+    #if "-v" in sys.argv:
+    #    verbose = True
+    #    sys.argv.remove("-v")
     
-    master_marker_file = sys.argv[1]
+    #master_marker_file = sys.argv[1]
+
+    master_marker_file = args.master_marker_file
+    master_audio_file = args.master_audio_file
+    secondary_audio_files = args.secondary_audio_file
+    verbose = args.verbose
+    allowOverwriteDTW = args.allowOverwriteDTW
+
+    
 
     debug("Reading markers from %s" % master_marker_file)
     master_markers = loadMarkers(master_marker_file)
@@ -56,8 +94,8 @@ def main():
     if len(sys.argv) == 2:
         sys.exit(1)
         
-    master_audio_file = sys.argv[2]
-    secondary_audio_files = sys.argv[3:]
+    #master_audio_file = sys.argv[2]
+    #secondary_audio_files = sys.argv[3:]
 
     debug("master_audio_file: %s" % master_audio_file)
     m = re.match("(.*?/?)([^/.]+).(mp3|wav)", master_audio_file)
@@ -406,10 +444,10 @@ def debug(msg):
         
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        main()
-    else:
-        sys.stderr.write("USAGE: python3 dtw_markers.py MASTER_MARKERS (MASTER_AUDIO SECONDARY_AUDIO ..)\n")
-        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt\n")
-        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3\n")
-        sys.exit()
+#    if len(sys.argv) > 1:
+    main()
+    #else:
+    #    sys.stderr.write("USAGE: python3 dtw_markers.py MASTER_MARKERS (MASTER_AUDIO SECONDARY_AUDIO ..)\n")
+    #    sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt\n")
+    #    sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3\n")
+    #    sys.exit()
