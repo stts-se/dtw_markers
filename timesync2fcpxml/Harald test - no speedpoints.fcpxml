@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.9">
+    <resources>
+        <format frameDuration="1/25s" id="r0" name="FFVideoFormat1080p25" width="1920" height="1080"/>
+        <format frameDuration="1/50s" id="r1" name="FFVideoFormat1080p50" width="1920" height="1080"/>
+        <asset id="r2" name="A-20 KFO 018 ORAMO-221.mov" hasAudio="1" hasVideo="1" audioChannels="1" format="r1" start="945768/25s" duration="12239/25s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/TIMECODE%20CORRECTED/A-20%20KFO%20018%20ORAMO-221.mov" kind="original-media"/>
+        </asset>
+        <asset id="r3" name="A-20 KFO 018 ORAMO-222.mov" hasAudio="1" hasVideo="1" audioChannels="1" format="r1" start="972784/25s" duration="23719/50s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/TIMECODE%20CORRECTED/A-20%20KFO%20018%20ORAMO-222.mov" kind="original-media"/>
+        </asset>
+        <asset id="r4" name="A-20 KFO 018 ORAMO-223.mov" hasAudio="1" hasVideo="1" audioChannels="1" format="r1" start="200007/5s" duration="23221/50s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/TIMECODE%20CORRECTED/A-20%20KFO%20018%20ORAMO-223.mov" kind="original-media"/>
+        </asset>
+        <asset id="r5" name="B-20 KFO 018 ORAMO-123.mov" hasAudio="1" hasVideo="1" audioChannels="1" format="r1" start="189073/5s" duration="12619/25s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/TIMECODE%20CORRECTED/B-20%20KFO%20018%20ORAMO-123.mov" kind="original-media"/>
+        </asset>
+        <asset id="r6" name="B-20 KFO 018 ORAMO-124.mov" hasAudio="1" hasVideo="1" audioChannels="1" format="r1" start="972181/25s" duration="12408/25s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/TIMECODE%20CORRECTED/B-20%20KFO%20018%20ORAMO-124.mov" kind="original-media"/>
+        </asset>
+        <asset id="r7" name="B-20 KFO 018 ORAMO-125.mov" hasAudio="1" hasVideo="1" audioChannels="1" format="r1" start="999921/25s" duration="11656/25s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/TIMECODE%20CORRECTED/B-20%20KFO%20018%20ORAMO-125.mov" kind="original-media"/>
+        </asset>
+        <asset id="r8" name="ORAMOSIBELIUSDAY2-085.WAV" hasAudio="1" audioChannels="2" start="75286318361/1998000s" duration="435043271/666000s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/ORAMOSIBELIUSDAY2-085.WAV" kind="original-media"/>
+        </asset>
+        <asset id="r9" name="ORAMOSIBELIUSDAY2-087.WAV" hasAudio="1" audioChannels="2" start="77682240041/1998000s" duration="339897401/666000s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/ORAMOSIBELIUSDAY2-087.WAV" kind="original-media"/>
+        </asset>
+        <asset id="r10" name="ORAMOSIBELIUSDAY2-088.WAV" hasAudio="1" audioChannels="2" start="79908012041/1998000s" duration="472362581/999000s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/FOOTAGE/ORAMOSIBELIUSDAY2-088.WAV" kind="original-media"/>
+        </asset>
+        <asset id="r11" name="Trumpet - take 1.mp3" hasAudio="1" audioChannels="2" start="0/1s" duration="56959/125s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/TIMESYNC/Trumpet%20-%20take%201.mp3" kind="original-media"/>
+        </asset>
+        <asset id="r12" name="Trumpet - take 2.mp3" hasAudio="1" audioChannels="2" start="0/1s" duration="57079/125s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/TIMESYNC/Trumpet%20-%20take%202.mp3" kind="original-media"/>
+        </asset>
+        <asset id="r13" name="Trumpet - take 3.mp3" hasAudio="1" audioChannels="2" start="0/1s" duration="56227/125s" audioSources="1">
+            <media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20JHS%20001%20-%20Stipendiater/TIMESYNC/Trumpet%20-%20take%203.mp3" kind="original-media"/>
+        </asset>
+    </resources>
+    <library>
+        <event name="Harald test - no speedpoints (Resolve)">
+            <project name="Harald test - no speedpoints (Resolve)">
+                <sequence tcFormat="NDF" format="r0" duration="111577/25s" tcStart="36000/1s">
+                    <spine>
+                        <gap name="Gap" offset="36000/1s" start="3600/1s" duration="45768/25s"/>
+                        <clip name="A-20 KFO 018 ORAMO-221.mov" tcFormat="NDF" offset="945768/25s" format="r1" enabled="1" start="945768/25s" duration="12216/25s">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                            <video offset="945768/25s" ref="r2" start="945768/25s" duration="12239/25s"/>
+                            <clip name="B-20 KFO 018 ORAMO-123.mov" tcFormat="NDF" lane="1" offset="945768/25s" format="r1" enabled="1" start="945768/25s" duration="12216/25s">
+                                <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                                <video offset="189073/5s" ref="r5" start="189073/5s" duration="12619/25s"/>
+                            </clip>
+                            <asset-clip name="ORAMOSIBELIUSDAY2-085.WAV" lane="2" offset="945768/25s" enabled="1" ref="r8" start="75585778601/1998000s" duration="12216/25s"/>
+                            <asset-clip name="Trumpet - take 1.mp3" lane="3" offset="37855/1s" enabled="1" ref="r11" start="0/1s" duration="11391/25s"/>
+                        </clip>
+                        <gap name="Gap" offset="957984/25s" start="3600/1s" duration="592/1s"/>
+                        <clip name="A-20 KFO 018 ORAMO-222.mov" tcFormat="NDF" offset="972784/25s" format="r1" enabled="1" start="972784/25s" duration="2361/5s">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                            <video offset="972784/25s" ref="r3" start="972784/25s" duration="23719/50s"/>
+                            <clip name="B-20 KFO 018 ORAMO-124.mov" tcFormat="NDF" lane="1" offset="972784/25s" format="r1" enabled="1" start="972784/25s" duration="2361/5s">
+                                <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                                <video offset="972181/25s" ref="r6" start="972181/25s" duration="12408/25s"/>
+                            </clip>
+                            <asset-clip name="ORAMOSIBELIUSDAY2-087.WAV" lane="2" offset="972784/25s" enabled="1" ref="r9" start="77744897321/1998000s" duration="2361/5s"/>
+                            <asset-clip name="Trumpet - take 2.mp3" lane="3" offset="973026/25s" enabled="1" ref="r12" start="0/1s" duration="2283/5s"/>
+                        </clip>
+                        <gap name="Gap" offset="984589/25s" start="3600/1s" duration="15446/25s"/>
+                        <clip name="A-20 KFO 018 ORAMO-223.mov" tcFormat="NDF" offset="200007/5s" format="r1" enabled="1" start="200007/5s" duration="11542/25s">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                            <video offset="200007/5s" ref="r4" start="200007/5s" duration="23221/50s"/>
+                            <clip name="B-20 KFO 018 ORAMO-125.mov" tcFormat="NDF" lane="1" offset="200007/5s" format="r1" enabled="1" start="200007/5s" duration="11542/25s">
+                                <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                                <video offset="999921/25s" ref="r7" start="999921/25s" duration="11656/25s"/>
+                            </clip>
+                            <asset-clip name="ORAMOSIBELIUSDAY2-088.WAV" lane="2" offset="200007/5s" enabled="1" ref="r10" start="79922797241/1998000s" duration="11542/25s"/>
+                            <asset-clip name="Trumpet - take 3.mp3" lane="3" offset="1000227/25s" enabled="1" ref="r13" start="0/1s" duration="2249/5s"/>
+                        </clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
