@@ -1,0 +1,1 @@
+python3 timesync2fcpxml.py Harald\ test\ -\ with\ speedpoints.fcpxml Trumpet\ -\ master_TimeSync.txt Trumpet\ -\ take\ 1_TimeSync.txt Trumpet\ -\ take\ 2_TimeSync.txt Trumpet\ -\ take\ 3_TimeSync.txt > Harald\ test\ -\ with\ speedpoints_OUT.fcpxml
