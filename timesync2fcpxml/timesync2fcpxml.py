@@ -11,8 +11,18 @@ def main():
     with open(xmlfile) as fh:
         doc = etree.parse(fh)
 
+    #First test file had this
     clips = doc.xpath("library/event/project/sequence/spine/clip")
+    
+    if len(clips) == 0:
+        #second test file had this
+        clips = doc.xpath("library/event/project/sequence/spine/asset-clip")
+        
 
+
+    
+    log(f"Number of clips in xml : {len(clips)}")
+    log(f"Number of Take sp files: {len(take_tp_files)}")
     assert len(clips) == len(take_tp_files)
 
     master_tp = readTimePointFile(master_tp_file)
