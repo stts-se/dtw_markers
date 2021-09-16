@@ -11,13 +11,8 @@ def main():
     with open(xmlfile) as fh:
         doc = etree.parse(fh)
 
-    #First test file had this
-    clips = doc.xpath("library/event/project/sequence/spine/clip")
-    
-    if len(clips) == 0:
-        #second test file had this
-        clips = doc.xpath("library/event/project/sequence/spine/asset-clip")
-        
+    #clip, asset-clip, ref-clip are all ok
+    clips = doc.xpath("library/event/project/sequence/spine/clip|library/event/project/sequence/spine/asset-clip|library/event/project/sequence/spine/ref-clip")
 
 
     
