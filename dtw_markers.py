@@ -23,6 +23,8 @@ allowOverwriteDTW = True
 writeSrt = False
 
 #useLibsndfile = True
+#Fails with "RuntimeError: Error opening 'test_data/sir_duke_fast.mp3': File contains data in an unknown format."
+#Didn't happen before.. ToDo look into it - needs update?
 useLibsndfile = False
 
 gui = False
@@ -179,7 +181,9 @@ def getDTW(x_1, x_2, samplerate, n_fft, hop_size):
     x_2_chroma = librosa.feature.chroma_stft(y=x_2, sr=samplerate, tuning=0, norm=2, hop_length=hop_size, n_fft=n_fft)
 
     print("Aligning chroma sequences")
-    D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+    #librosa 0.8.1 no longer has this, moved to "sequence"
+    #D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+    D, wp = librosa.sequence.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
     print("Finished aligning chroma sequences")
     return wp
     
