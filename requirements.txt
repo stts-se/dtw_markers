@@ -5,3 +5,5 @@ librosa==0.8.0
 Gooey==1.0.4.0.0.0
 SoundFile==0.10.3.post1
 wuy==0.10.1
+llvmlite==0.32.1
+numba==0.49.1

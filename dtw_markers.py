@@ -22,7 +22,8 @@ allowOverwriteDTW = True
 
 writeSrt = False
 
-useLibsndfile = True
+#useLibsndfile = True
+useLibsndfile = False
 
 gui = False
 
