@@ -44,35 +44,84 @@ def readTimePointFile(filename):
     return tps
     
 def addTimepointsToClip(clip, master_tp, take_tp):
-    log(clip)
+    #log(clip)
     #log(take_tp)
 
     timeMaps = clip.xpath(".//timeMap")
+    nrTimeMaps = len(timeMaps)
     for timeMap in timeMaps:
-        log(timeMap)
+        #log(timeMap)
         addTimepointsToTimeMap(timeMap, master_tp, take_tp)
+        #sys.exit()
 
+
+def getDiff(tp1, tp2):
+    val1 = int(tp1.get('time').replace("s", "").split("/")[0])
+    rate1 = int(tp1.get('time').replace("s", "").split("/")[1])
+
+    #log(f"VAL1:  {val1}")
+    #log(f"RATE1: {rate1}")
+
+
+
+
+    
+    val2 = int(tp2.get('time').replace("s", "").split("/")[0])
+    rate2 = int(tp2.get('time').replace("s", "").split("/")[1])
+
+    #log(f"VAL2:  {val2}")
+    #log(f"RATE2: {rate2}")
+
+    q1 = 50 / rate1
+    #if rate1 == 25:
+    res1 = val1 * q1
+
+    q2 = 50 / rate2
+    #if rate2 == 25:   
+    res2 = val2 * q2
+    
+    diff = int(res1-res2)
+
+    log(f"RATE1: {rate1}")
+    if rate1 != 25:    
+        log(f"RES1: {res1}")
+        log(f"RES2: {res2}")    
+    log(f"DIFF: {diff}")
+    
+    return diff
+
+        
 
 def addTimepointsToTimeMap(timeMap, master_tp, take_tp):
     #first_timept = timeMap[0]
     second_timept = timeMap[1]
     zeropoint_string = second_timept.get("time")
 
-    #save last timepoint in timeMap, to append finally
-    last_timept = timeMap[-1]
-    timeMap.remove(last_timept)
-    
+
     #remove second last timepoint in timeMap, it will be replaced by last in tp
     #print(dir(timeMap))
     second_last_timept = timeMap[-2]
     timeMap.remove(second_last_timept)
+   
+
+    
+    #save last timepoint in timeMap, to append finally
+    last_timept = timeMap[-1]
+    timeMap.remove(last_timept)
+
+    #log(f"SECOND LAST TIMEPT:   {second_last_timept.get('time')}")
+    #log(f"LAST TIMEPT:          {last_timept.get('time')}")
+    #log(f"LAST TIMEPT VALUE:          {last_timept.get('value')}")
+
+    diffSecondLastToLast = getDiff(last_timept,second_last_timept)
+    #log(f"DIFF:       {diffSecondLastToLast}")
     
     (zeropoint, fps) = zeropoint_string[:-1].split("/")
     #log(fps)
     factor = 50/int(fps)
     #log(factor)
     zeropoint_50f = int(int(zeropoint)*factor)
-    log(f"zeropoint_50f: {zeropoint_50f}")
+    #log(f"zeropoint_50f: {zeropoint_50f}")
 
     nr = 0
     while len(master_tp) > nr:
@@ -94,7 +143,20 @@ def addTimepointsToTimeMap(timeMap, master_tp, take_tp):
 
         nr += 1
 
-    timeMap.append(last_timept) 
+
+    new_last_timepoint_50f = f"{int(take_timepoint*50+zeropoint_50f+diffSecondLastToLast)}/50s"
+
+    new_last_timept = etree.Element("timept")
+    new_last_timept.set("interp", "linear")
+    new_last_timept.set("time", new_last_timepoint_50f)
+    new_last_timept.set("value", new_last_timepoint_50f)
+
+
+    #log(f"NEW SECOND LAST TIMEPT VALUE:  {new_timept.get('value')}")
+    #log(f"NEW LAST TIMEPT VALUE:         {new_last_timept.get('value')}")
+
+    
+    timeMap.append(new_last_timept) 
 
     
 
