@@ -1,3 +1,37 @@
+## TimeSync_2.1.py
+
+```
+USAGE:
+
+Simple gui:
+python3 TimeSync_2.1.py
+
+Help message:
+python3 TimeSync_2.1.py -h
+
+Command line example:
+python3 TimeSync_2.1.py test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## dtw_markers.py
 
 ```

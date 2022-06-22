@@ -35,7 +35,7 @@ if len(sys.argv)>=2:
         
 @Gooey
 def main():
-    global verbose, allowOverwriteDTW
+    global verbose, overwriteDTW
 
 
     if gui:
@@ -44,6 +44,7 @@ def main():
         #parser.add_argument('master_marker_file', widget="FileChooser")    
         parser.add_argument('master_audio_file', widget="FileChooser")    
         parser.add_argument('secondary_audio_file', nargs="*", widget="MultiFileChooser")    
+
     else:    
         parser = argparse.ArgumentParser()   
         #jun22 master_marker_file should always have tha same name
@@ -51,7 +52,8 @@ def main():
         parser.add_argument('master_audio_file')    
         parser.add_argument('secondary_audio_file', nargs="*")    
 
-    parser.add_argument('-n',action='store_true',dest='allowOverwriteDTW', default=True, help="Allow overwrite DTW file. Default: True")    
+
+    parser.add_argument('-o',action='store_true',dest='overwriteDTW', default=False, help="overwrite existing DTW file. Default: False")
     parser.add_argument('-v',action='store_true',dest='verbose', help="Verbose output. Default: False")    
     parser.add_argument('-m',action='store',dest='master_marker_file', default="label track.txt", help="Name of master marker file. Default: '<AUDIODIR>/label track.txt'")    
 
@@ -65,7 +67,7 @@ def main():
     master_audio_file = args.master_audio_file
     secondary_audio_files = args.secondary_audio_file
     verbose = args.verbose
-    allowOverwriteDTW = args.allowOverwriteDTW
+    overwriteDTW = args.overwriteDTW
 
 
     
@@ -134,8 +136,8 @@ def main():
         secondary_audio_base = m.group(2)
 
         dtw_file = "%s%s-%s-%s-%s-%s.npy" % (directory, master_audio_base, secondary_audio_base, samplerate, n_fft, hop_size)
-        print(f"allowOverwriteDTW: {allowOverwriteDTW} - checkWriteDTW({dtw_file}): {checkWriteDTW(dtw_file)}")
-        if allowOverwriteDTW and checkWriteDTW(dtw_file):
+        #print(f"overwriteDTW: {overwriteDTW} - checkWriteDTW({dtw_file}): {checkWriteDTW(dtw_file)}")
+        if checkWriteDTW(dtw_file):
             if not master_audio_loaded:
                 (master_audio, samplerate) = loadAudio(master_audio_file, resample)
                 master_audio_loaded = True
@@ -158,16 +160,21 @@ def main():
     print(cmd)
     os.system(cmd)
         
+
 def checkWriteDTW(filename):
+    
+    ask = False
     if not os.path.exists(filename):
         return True
-    else:
+    elif overwriteDTW and os.path.exists(filename):
+        return True
+    elif ask:
         sys.stderr.write("DTW file %s already exists. Overwrite? y/N\n" % filename)
         reply = sys.stdin.read(1)
         if reply == "y":
             return True        
-        
-    return False
+    else:
+        return False
 
 
 def loadAudio(filename, resample=True):
