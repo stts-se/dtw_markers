@@ -1,6 +1,7 @@
-import sys
+import sys, re, os
 from lxml import etree
 
+verbose = False
 
 xmlfile = sys.argv[1]
 master_tp_file = sys.argv[2]
@@ -29,11 +30,22 @@ def main():
         addTimepointsToClip(clips[nr], master_tp, take_tp)
         nr += 1
 
+
+    #Change event and event/project name to basename
+    basename = re.sub(" - syncmap.fcpxml", " - synced", os.path.basename(xmlfile))
+    event = doc.xpath("library/event")[0]
+    event.set("name",basename)
+    project = doc.xpath("library/event/project")[0]
+    project.set("name",basename)
+
+
+        
     etree.indent(doc, "    ")
     print(str(etree.tostring(doc, xml_declaration=True), "utf-8"))
 
 def log(msg):
-    sys.stderr.write(f"{msg}\n")
+    if verbose:
+        sys.stderr.write(f"{msg}\n")
 
 def readTimePointFile(filename):
     with open(filename) as fh:

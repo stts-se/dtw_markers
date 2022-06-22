@@ -16,4 +16,15 @@ Lägg till sist när script körs "> "output.fcpxml" ska vara ursprungsnamn på 
 Ändra i filen innan output.fcpxml skapas:  
 <event name="ursprungsnamn - synced">
             <project name="ursprungsnamn - synced">
+OK
 
+
+
+
+TILLÄGG:
+
+Först av allt - skapa filen "label track.txt" med en marker var femte sekund (första efter 5 s) och en marker vid filslut.
+Den filen kan vara temp eller behöver inte skrivas ut alls.
+
+OK input.fcpxml -> "<AUDIO> - syncmap.fcpxml"
+OK outfile: "<AUDIO> - synced.fcpxml"

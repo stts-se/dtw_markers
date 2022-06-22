@@ -1,10 +1,10 @@
 import sys, os, re
-
+#import librosa, numpy
 
 #Main script for dtw_markers
 #Input:
-#Master marker file
 #Master audio file
+#Master marker file
 #Secondary audio files
 
 #For each secondary audio file:
@@ -14,32 +14,29 @@ import sys, os, re
 #If dtw file exists - load dtw file and Master marker file
 #Print Secondary marker file and audacity label file
 
+
+
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+
 verbose = False
 allowOverwriteDTW = True
-
-
 writeSrt = False
 
-#useLibsndfile = True
-#Fails with "RuntimeError: Error opening 'test_data/sir_duke_fast.mp3': File contains data in an unknown format."
-#Didn't happen before.. ToDo look into it - needs update?
-useLibsndfile = False
 
 gui = True
-
-if not gui:
-    import argparse
-    def Gooey(func):
-        return func
-else:
-    from gooey import Gooey
-    from gooey import GooeyParser
-    
-
-
+import argparse
+from gooey import Gooey, GooeyParser
+if len(sys.argv)>=2:
+    gui = False
+    if not '--ignore-gooey' in sys.argv:
+        sys.argv.append('--ignore-gooey')
+        
 @Gooey
 def main():
     global verbose, allowOverwriteDTW
+
 
     if gui:
         parser = GooeyParser()   
@@ -47,14 +44,14 @@ def main():
         #parser.add_argument('master_marker_file', widget="FileChooser")    
         parser.add_argument('master_audio_file', widget="FileChooser")    
         parser.add_argument('secondary_audio_file', nargs="*", widget="MultiFileChooser")    
-    else:
+    else:    
         parser = argparse.ArgumentParser()   
         #jun22 master_marker_file should always have tha same name
         #parser.add_argument('master_marker_file')    
         parser.add_argument('master_audio_file')    
         parser.add_argument('secondary_audio_file', nargs="*")    
 
-    parser.add_argument('-n',action='store_false',dest='allowOverwriteDTW', help="Allow overwrite DTW file. Default: True")    
+    parser.add_argument('-n',action='store_true',dest='allowOverwriteDTW', default=True, help="Allow overwrite DTW file. Default: True")    
     parser.add_argument('-v',action='store_true',dest='verbose', help="Verbose output. Default: False")    
     parser.add_argument('-m',action='store',dest='master_marker_file', default="label track.txt", help="Name of master marker file. Default: '<AUDIODIR>/label track.txt'")    
 
@@ -62,8 +59,7 @@ def main():
 
     #Imports here to speed up help message!
     import librosa, numpy
-    import soundfile as sf
-    global librosa, numpy, sf
+    global librosa, numpy
 
 
     master_audio_file = args.master_audio_file
@@ -71,13 +67,30 @@ def main():
     verbose = args.verbose
     allowOverwriteDTW = args.allowOverwriteDTW
 
+
+    
     audio_dir = os.path.dirname(master_audio_file)
     master_marker_file = f"{audio_dir}/{args.master_marker_file}"
-    
 
+    #jun22 create "label track.txt"
+    master_duration = librosa.get_duration(filename=master_audio_file)
+    print(f"Writing 5s intervals to {master_marker_file}")
+    #print("master_duration %.2f" % master_duration)
+    with open(master_marker_file, "w") as fh:
+        i = 1
+        tp = 5.0
+        while tp < master_duration:
+            fh.write(f"{tp}\t{tp}\t{i:02}\n")            
+            i += 1
+            tp += 5.0
+    
+    #sys.exit()
+    
     debug("Reading markers from %s" % master_marker_file)
     master_markers = loadMarkers(master_marker_file)
-    master_audacity_file = re.sub("\.txt$", "_audacity.txt", master_marker_file)
+    #jun22 name from master audio
+    #master_audacity_file = re.sub("\.txt$", "_TimeSync.txt", master_marker_file)
+    master_audacity_file = re.sub("\.mp3$", "_TimeSync.txt", master_audio_file)
     debug("Writing markers to %s" % master_audacity_file)
     writeAudacityLabels(master_markers, master_audacity_file)
     if writeSrt:
@@ -91,14 +104,13 @@ def main():
 
     debug("Done processing %d markers" % len(master_markers))
 
-    if len(sys.argv) == 2:
-        sys.exit(1)
-        
+    #if len(sys.argv) == 2:
+    #    sys.exit(1)
+    #    
     #master_audio_file = sys.argv[2]
     #secondary_audio_files = sys.argv[3:]
 
-    debug("master_audio_file: %s" % master_audio_file)
-    m = re.match("(.*?/?)([^/.]+).(mp3|wav)", master_audio_file)
+    m = re.match("(.*?/?)([^/.]+).mp3", master_audio_file)
     #directory = m.group(1)
     master_audio_base = m.group(2)
     master_audio = None
@@ -109,6 +121,7 @@ def main():
     samplerate = 22050
     resample = True
 
+
     
     #Reverse list before getting secondary markers
     master_markers.reverse()
@@ -116,13 +129,12 @@ def main():
     
     for secondary_audio_file in secondary_audio_files:
 
-        debug("secondary_audio_file: %s" % secondary_audio_file)
-        
-        m = re.match("(.*?/?)([^/.]+).(mp3|wav)", secondary_audio_file)
+        m = re.match("(.*?/?)([^/.]+).mp3", secondary_audio_file)
         directory = m.group(1)
         secondary_audio_base = m.group(2)
 
         dtw_file = "%s%s-%s-%s-%s-%s.npy" % (directory, master_audio_base, secondary_audio_base, samplerate, n_fft, hop_size)
+        print(f"allowOverwriteDTW: {allowOverwriteDTW} - checkWriteDTW({dtw_file}): {checkWriteDTW(dtw_file)}")
         if allowOverwriteDTW and checkWriteDTW(dtw_file):
             if not master_audio_loaded:
                 (master_audio, samplerate) = loadAudio(master_audio_file, resample)
@@ -133,8 +145,18 @@ def main():
         else:
             dtw = loadDTW(dtw_file)
 
-        writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate)
+        duration = librosa.get_duration(filename=secondary_audio_file)
+        debug("duration %.2f" % duration)
+        writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate, duration)
 
+
+    #jun22
+    #Finally run timesync2fcpxml.py
+    #later import script instead of running in system
+    audio_base = re.sub(" - master", "", master_audio_base)
+    cmd = f"python3 timesync2fcpxml/timesync2fcpxml.py '{audio_dir}/{audio_base} - syncmap.fcpxml' {audio_dir}/*master_TimeSync.txt {audio_dir}/*take\ *_TimeSync.txt > '{audio_dir}/{audio_base} - synced.fcpxml'"
+    print(cmd)
+    os.system(cmd)
         
 def checkWriteDTW(filename):
     if not os.path.exists(filename):
@@ -150,10 +172,6 @@ def checkWriteDTW(filename):
 
 def loadAudio(filename, resample=True):
     print("Loading %s" % filename)
-
-    if useLibsndfile:
-        return loadAudioWithLibsndfile(filename, resample)
-
     if resample:
         audio, samplerate = librosa.load(filename)
     else:
@@ -161,26 +179,17 @@ def loadAudio(filename, resample=True):
     debug("samplerate %d" % samplerate)
     return (audio, samplerate)
 
-
-def loadAudioWithLibsndfile(filename, resample=True):
-    data, samplerate = sf.read(filename, dtype='float32')
-    data = data.T
-    if resample:
-        data_22k = librosa.resample(data, samplerate, 22050)
-        return (data_22k, samplerate)
-    return (data, samplerate)
-
-
-
 def getDTW(x_1, x_2, samplerate, n_fft, hop_size):
     print("Getting chroma sequences")
     x_1_chroma = librosa.feature.chroma_stft(y=x_1, sr=samplerate, tuning=0, norm=2, hop_length=hop_size, n_fft=n_fft)
     x_2_chroma = librosa.feature.chroma_stft(y=x_2, sr=samplerate, tuning=0, norm=2, hop_length=hop_size, n_fft=n_fft)
 
     print("Aligning chroma sequences")
-    #librosa 0.8.1 no longer has this, moved to "sequence"
+    #This was for an older version of librosa
     #D, wp = librosa.core.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
-    D, wp = librosa.sequence.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+    #D, wp = librosa.sequence.dtw(X=x_1_chroma, Y=x_2_chroma, metric='cosine')
+
+    D, wp = librosa.sequence.dtw(X=x_1_chroma, Y=x_2_chroma, metric='euclidean')
     print("Finished aligning chroma sequences")
     return wp
     
@@ -201,12 +210,12 @@ def loadDTW(filename):
 
 
 nr_frames_per_second = 50.0
-def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate):
+def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate, duration):
     secondary_marker_file = "%s%s_markers_dtw.txt" % (directory, secondary_audio_base)
-    secondary_audacity_file = "%s%s_markers_dtw_audacity.txt" % (directory, secondary_audio_base)
+    secondary_audacity_file = "%s%s_TimeSync.txt" % (directory, secondary_audio_base)
     secondary_srt_file = "%s%s_markers_dtw.srt" % (directory, secondary_audio_base)
 
-    secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate)
+    secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate, duration)
     #debug("Second secondary marker: %s %s" % secondary_markers[1])
 
     writeAudacityLabels(secondary_markers, secondary_audacity_file)
@@ -280,7 +289,7 @@ def loadMarkers(filename):
 
 
 
-def getSecondaryMarkers(wp, markers, hop_size, samplerate):
+def getSecondaryMarkers(wp, markers, hop_size, samplerate, duration):
 
     lines = []
     points_idx = numpy.int16(numpy.round(numpy.linspace(0, wp.shape[0] - 1, hop_size)))
@@ -353,6 +362,15 @@ def getSecondaryMarkers(wp, markers, hop_size, samplerate):
         mark_index += 1
         marker_nr -= 1
 
+
+    lastMarkerAlwaysAtEnd = True
+    #HB 200427 Use duration instead of last marker = last timepoint is always at end of file
+    if lastMarkerAlwaysAtEnd:
+        (label, _) = markers2_list[0]
+        markers2_list[0] = (label, duration)
+
+
+        
     debug("markers2_list: %s" % markers2_list)
     markers2_list.reverse()
     debug("markers2_list reversed: %s" % markers2_list)
@@ -447,9 +465,9 @@ def debug(msg):
 
 if __name__ == "__main__":
 #    if len(sys.argv) > 1:
-    main()
-    #else:
-    #    sys.stderr.write("USAGE: python3 dtw_markers.py MASTER_MARKERS (MASTER_AUDIO SECONDARY_AUDIO ..)\n")
-    #    sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt\n")
-    #    sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3\n")
-    #    sys.exit()
+        main()
+#    else:
+#        sys.stderr.write("USAGE: python3 dtw_markers.py MASTER_MARKERS (MASTER_AUDIO SECONDARY_AUDIO ..)\n")
+#        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt\n")
+#        sys.stderr.write("EXAMPLE: python3 dtw_markers.py test_data/sir_duke_fast_markers.txt test_data/sir_duke_fast.mp3 test_data/sir_duke_slow.mp3\n")
+#        sys.exit()
