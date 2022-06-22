@@ -1,4 +1,4 @@
-import sys, os, re
+import sys, os, re, glob
 #import librosa, numpy
 
 #Main script for dtw_markers
@@ -156,10 +156,18 @@ def main():
     #Finally run timesync2fcpxml.py
     #later import script instead of running in system
     audio_base = re.sub(" - master", "", master_audio_base)
-    cmd = f"python3 timesync2fcpxml/timesync2fcpxml.py '{audio_dir}/{audio_base} - syncmap.fcpxml' {audio_dir}/*master_TimeSync.txt {audio_dir}/*take\ *_TimeSync.txt > '{audio_dir}/{audio_base} - synced.fcpxml'"
-    print(cmd)
-    os.system(cmd)
-        
+    #cmd = f"python3 timesync2fcpxml/timesync2fcpxml.py '{audio_dir}/{audio_base} - syncmap.fcpxml' {audio_dir}/*master_TimeSync.txt {audio_dir}/*take\ *_TimeSync.txt > '{audio_dir}/{audio_base} - synced.fcpxml'"
+    #print(cmd)
+    #os.system(cmd)
+    
+    xmlfile = f"{audio_dir}/{audio_base} - syncmap.fcpxml"
+    master_tp_file = f"{audio_dir}/{audio_base} - master_TimeSync.txt"
+    take_tp_files = glob.glob(f"{audio_dir}/*take*_TimeSync.txt")
+    #print(take_tp_files)
+    #sys.exit()
+    outfile = f"{audio_dir}/{audio_base} - synced.fcpxml"
+
+    tp2fcp(xmlfile, master_tp_file, take_tp_files, outfile)
 
 def checkWriteDTW(filename):
     
@@ -470,6 +478,179 @@ def debug(msg):
         sys.stderr.write("%s\n" % msg)
         
 
+##########################
+#
+#  tp2fcpxml
+#
+
+from lxml import etree
+
+
+def tp2fcp(xmlfile, master_tp_file, take_tp_files, outfile):
+    with open(xmlfile) as fh:
+        doc = etree.parse(fh)
+
+    #clip, asset-clip, ref-clip are all ok
+    clips = doc.xpath("library/event/project/sequence/spine/clip|library/event/project/sequence/spine/asset-clip|library/event/project/sequence/spine/ref-clip")
+
+
+    
+    log(f"Number of clips in xml : {len(clips)}")
+    log(f"Number of Take sp files: {len(take_tp_files)}")
+    assert len(clips) == len(take_tp_files)
+
+    master_tp = readTimePointFile(master_tp_file)
+    
+    nr = 0    
+    while len(clips) > nr:
+        take_tp = readTimePointFile(take_tp_files[nr])
+        assert len(master_tp) == len(take_tp)
+        addTimepointsToClip(clips[nr], master_tp, take_tp)
+        nr += 1
+
+
+    #Change event and event/project name to basename
+    basename = re.sub(" - syncmap.fcpxml", " - synced", os.path.basename(xmlfile))
+    event = doc.xpath("library/event")[0]
+    event.set("name",basename)
+    project = doc.xpath("library/event/project")[0]
+    project.set("name",basename)
+
+    with open(outfile, "w") as fh:        
+        etree.indent(doc, "    ")
+        fh.write(str(etree.tostring(doc, xml_declaration=True), "utf-8"))
+
+def log(msg):
+    if verbose:
+        sys.stderr.write(f"{msg}\n")
+
+def readTimePointFile(filename):
+    with open(filename) as fh:
+        lines = fh.readlines()
+    tps = []
+    for line in lines:
+        tps.append(float(line.split("\t")[0]))
+    return tps
+    
+def addTimepointsToClip(clip, master_tp, take_tp):
+    #log(clip)
+    #log(take_tp)
+
+    timeMaps = clip.xpath(".//timeMap")
+    nrTimeMaps = len(timeMaps)
+    for timeMap in timeMaps:
+        #log(timeMap)
+        addTimepointsToTimeMap(timeMap, master_tp, take_tp)
+        #sys.exit()
+
+
+def getDiff(tp1, tp2):
+    val1 = int(tp1.get('time').replace("s", "").split("/")[0])
+    rate1 = int(tp1.get('time').replace("s", "").split("/")[1])
+
+    #log(f"VAL1:  {val1}")
+    #log(f"RATE1: {rate1}")
+
+
+
+
+    
+    val2 = int(tp2.get('time').replace("s", "").split("/")[0])
+    rate2 = int(tp2.get('time').replace("s", "").split("/")[1])
+
+    #log(f"VAL2:  {val2}")
+    #log(f"RATE2: {rate2}")
+
+    q1 = 50 / rate1
+    #if rate1 == 25:
+    res1 = val1 * q1
+
+    q2 = 50 / rate2
+    #if rate2 == 25:   
+    res2 = val2 * q2
+    
+    diff = int(res1-res2)
+
+    log(f"RATE1: {rate1}")
+    if rate1 != 25:    
+        log(f"RES1: {res1}")
+        log(f"RES2: {res2}")    
+    log(f"DIFF: {diff}")
+    
+    return diff
+
+        
+
+def addTimepointsToTimeMap(timeMap, master_tp, take_tp):
+    #first_timept = timeMap[0]
+    second_timept = timeMap[1]
+    zeropoint_string = second_timept.get("time")
+
+
+    #remove second last timepoint in timeMap, it will be replaced by last in tp
+    #print(dir(timeMap))
+    second_last_timept = timeMap[-2]
+    timeMap.remove(second_last_timept)
+   
+
+    
+    #save last timepoint in timeMap, to append finally
+    last_timept = timeMap[-1]
+    timeMap.remove(last_timept)
+
+    #log(f"SECOND LAST TIMEPT:   {second_last_timept.get('time')}")
+    #log(f"LAST TIMEPT:          {last_timept.get('time')}")
+    #log(f"LAST TIMEPT VALUE:          {last_timept.get('value')}")
+
+    diffSecondLastToLast = getDiff(last_timept,second_last_timept)
+    #log(f"DIFF:       {diffSecondLastToLast}")
+    
+    (zeropoint, fps) = zeropoint_string[:-1].split("/")
+    #log(fps)
+    factor = 50/int(fps)
+    #log(factor)
+    zeropoint_50f = int(int(zeropoint)*factor)
+    #log(f"zeropoint_50f: {zeropoint_50f}")
+
+    nr = 0
+    while len(master_tp) > nr:
+        master_timepoint = master_tp[nr]
+        take_timepoint = take_tp[nr]
+
+        master_timepoint_50f = f"{int(master_timepoint*50+zeropoint_50f)}/50s"
+        take_timepoint_50f = f"{int(take_timepoint*50+zeropoint_50f)}/50s"
+
+        new_timept = etree.Element("timept")
+        new_timept.set("interp", "linear")
+        #new_timept.set("value", master_timepoint_50f)
+        #new_timept.set("time", take_timepoint_50f)
+        new_timept.set("time", master_timepoint_50f)
+        new_timept.set("value", take_timepoint_50f)
+
+        #log(etree.tostring(new_timept))
+        timeMap.append(new_timept)
+
+        nr += 1
+
+
+    new_last_timepoint_50f = f"{int(take_timepoint*50+zeropoint_50f+diffSecondLastToLast)}/50s"
+
+    new_last_timept = etree.Element("timept")
+    new_last_timept.set("interp", "linear")
+    new_last_timept.set("time", new_last_timepoint_50f)
+    new_last_timept.set("value", new_last_timepoint_50f)
+
+
+    #log(f"NEW SECOND LAST TIMEPT VALUE:  {new_timept.get('value')}")
+    #log(f"NEW LAST TIMEPT VALUE:         {new_last_timept.get('value')}")
+
+    
+    timeMap.append(new_last_timept) 
+
+
+
+
+        
 if __name__ == "__main__":
 #    if len(sys.argv) > 1:
         main()

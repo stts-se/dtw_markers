@@ -8,7 +8,7 @@ master_tp_file = sys.argv[2]
 take_tp_files = sys.argv[3:]
 
 
-def main():
+def tp2fcp():
     with open(xmlfile) as fh:
         doc = etree.parse(fh)
 
@@ -172,4 +172,4 @@ def addTimepointsToTimeMap(timeMap, master_tp, take_tp):
 
     
 
-main()    
+tp2fcp()    
