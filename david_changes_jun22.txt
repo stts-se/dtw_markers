@@ -1,0 +1,19 @@
+När du har tid skulle du kunna lägga in följande ändringar i scriptet? Säg till om något är otydligt.
+
+master.mp3 = rätt namn
+master.txt = (som skapas av mig) har bytt namn till label track.txt (kommer alltid heta label track.txt)
+när master_TimeSync.txt skapas av scriptet så tas namnet från master.mp3 istället för från label track.txt.
+Med nuvarande script blir namnet label track_TimeSync.txt (ska vara master_TimeSync.txt)
+
+
+Sätt ihop dtw_markers.py och timesync2fcpxml.py:
+Jag kör dtw_markers.py och lägger sist in "input.fcpxml" (skapad av mig)
+När dtw_markers är klar = titta efter filer i samma mapp med samma namn som "tp-filer" med tillägget _TimeSync.txt och kör mot "input.fcpxml"
+
+
+timesync2fcpxml.py:
+Lägg till sist när script körs "> "output.fcpxml" ska vara ursprungsnamn på .fcpxml + " - synced"
+Ändra i filen innan output.fcpxml skapas:  
+<event name="ursprungsnamn - synced">
+            <project name="ursprungsnamn - synced">
+

@@ -1,6 +1,4 @@
 import sys, os, re
-import librosa, numpy
-import soundfile as sf
 
 
 #Main script for dtw_markers
@@ -59,16 +57,11 @@ def main():
 
     args = parser.parse_args()
 
+    #Imports here to speed up help message!
+    import librosa, numpy
+    import soundfile as sf
+    global librosa, numpy, sf
 
-    #if "-n" in sys.argv:
-    #    allowOverwriteDTW = False
-    #    sys.argv.remove("-n")
-
-    #if "-v" in sys.argv:
-    #    verbose = True
-    #    sys.argv.remove("-v")
-    
-    #master_marker_file = sys.argv[1]
 
     master_marker_file = args.master_marker_file
     master_audio_file = args.master_audio_file
