@@ -72,7 +72,7 @@ def main():
 
     
     audio_dir = os.path.dirname(master_audio_file)
-    master_marker_file = f"{audio_dir}/{args.master_marker_file}"
+    master_marker_file = os.path.join(audio_dir, args.master_marker_file)
 
     #jun22 create "label track.txt"
     master_duration = librosa.get_duration(filename=master_audio_file)
@@ -160,12 +160,12 @@ def main():
     #print(cmd)
     #os.system(cmd)
     
-    xmlfile = f"{audio_dir}/{audio_base} - syncmap.fcpxml"
-    master_tp_file = f"{audio_dir}/{audio_base} - master_TimeSync.txt"
-    take_tp_files = glob.glob(f"{audio_dir}/*take*_TimeSync.txt")
+    xmlfile = os.path.join(audio_dir, f"{audio_base} - syncmap.fcpxml")
+    master_tp_file = os.path.join(audio_dir, f"{audio_base} - master_TimeSync.txt")
+    take_tp_files = glob.glob(os.path.join(audio_dir, f"*take*_TimeSync.txt"))
     #print(take_tp_files)
     #sys.exit()
-    outfile = f"{audio_dir}/{audio_base} - synced.fcpxml"
+    outfile = os.path.join(audio_dir, f"{audio_base} - synced.fcpxml")
 
     tp2fcp(xmlfile, master_tp_file, take_tp_files, outfile)
 
