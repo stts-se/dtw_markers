@@ -112,9 +112,13 @@ def main():
     #master_audio_file = sys.argv[2]
     #secondary_audio_files = sys.argv[3:]
 
-    m = re.match("(.*?/?)([^/.]+).mp3", master_audio_file)
+    #m = re.match("(.*?/?)([^/.]+).mp3", master_audio_file)
     #directory = m.group(1)
-    master_audio_base = m.group(2)
+    #master_audio_base = m.group(2)
+
+    master_audio_base = os.path.splitext(os.path.basename(master_audio_file))[0]
+
+    
     master_audio = None
     master_audio_loaded = False
     
@@ -131,11 +135,17 @@ def main():
     
     for secondary_audio_file in secondary_audio_files:
 
-        m = re.match("(.*?/?)([^/.]+).mp3", secondary_audio_file)
-        directory = m.group(1)
-        secondary_audio_base = m.group(2)
+        #m = re.match("(.*?/?)([^/.]+).mp3", secondary_audio_file)
+        #directory = m.group(1)
+        #secondary_audio_base = m.group(2)
 
-        dtw_file = "%s%s-%s-%s-%s-%s.npy" % (directory, master_audio_base, secondary_audio_base, samplerate, n_fft, hop_size)
+        directory = os.path.split(secondary_audio_file)[0]
+        secondary_audio_base = os.path.splitext(os.path.basename(secondary_audio_file))[0]
+
+        print(directory)
+        print(secondary_audio_base)
+        
+        dtw_file = os.path.join(directory, "%s-%s-%s-%s-%s.npy" % (master_audio_base, secondary_audio_base, samplerate, n_fft, hop_size))
         #print(f"overwriteDTW: {overwriteDTW} - checkWriteDTW({dtw_file}): {checkWriteDTW(dtw_file)}")
         if checkWriteDTW(dtw_file):
             if not master_audio_loaded:
@@ -226,9 +236,9 @@ def loadDTW(filename):
 
 nr_frames_per_second = 50.0
 def writeOutputFiles(dtw, master_markers, directory, secondary_audio_base, hop_size, samplerate, duration):
-    secondary_marker_file = "%s%s_markers_dtw.txt" % (directory, secondary_audio_base)
-    secondary_audacity_file = "%s%s_TimeSync.txt" % (directory, secondary_audio_base)
-    secondary_srt_file = "%s%s_markers_dtw.srt" % (directory, secondary_audio_base)
+    secondary_marker_file = os.path.join(directory, f"{secondary_audio_base}_markers_dtw.txt")
+    secondary_audacity_file = os.path.join(directory, f"{secondary_audio_base}_TimeSync.txt")
+    secondary_srt_file = os.path.join(directory, f"{secondary_audio_base}_markers_dtw.srt")
 
     secondary_markers = getSecondaryMarkers(dtw, master_markers, hop_size, samplerate, duration)
     #debug("Second secondary marker: %s %s" % secondary_markers[1])
