@@ -25,15 +25,15 @@ allowOverwriteDTW = True
 writeSrt = False
 
 
-gui = True
+gui = False
 import argparse
-from gooey import Gooey, GooeyParser
-if len(sys.argv)>=2:
-    gui = False
-    if not '--ignore-gooey' in sys.argv:
-        sys.argv.append('--ignore-gooey')
+# from gooey import Gooey, GooeyParser
+# if len(sys.argv)>=2:
+#     gui = False
+#     if not '--ignore-gooey' in sys.argv:
+#         sys.argv.append('--ignore-gooey')
         
-@Gooey
+# @Gooey
 def main():
     global verbose, overwriteDTW
 
@@ -85,6 +85,8 @@ def main():
             fh.write(f"{tp}\t{tp}\t{i:02}\n")            
             i += 1
             tp += 5.0
+        #HB 230301 Finally one timepoint at end of file
+        fh.write(f"{master_duration:.3}\t{master_duration:.3}\t{i:02}\n")            
     
     #sys.exit()
     

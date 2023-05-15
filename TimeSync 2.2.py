@@ -24,16 +24,19 @@ verbose = False
 allowOverwriteDTW = True
 writeSrt = False
 
-
-gui = True
+#TODO Gooey no longer works 230512
+gui = False
 import argparse
-from gooey import Gooey, GooeyParser
 if len(sys.argv)>=2:
     gui = False
-    if not '--ignore-gooey' in sys.argv:
-        sys.argv.append('--ignore-gooey')
+    #if not '--ignore-gooey' in sys.argv:
+    #    sys.argv.append('--ignore-gooey')
+
+if gui:
+    from gooey import Gooey, GooeyParser
         
-@Gooey
+
+#@Gooey
 def main():
     global verbose, overwriteDTW
 
@@ -74,22 +77,11 @@ def main():
     audio_dir = os.path.dirname(master_audio_file)
     master_marker_file = f"{audio_dir}/{args.master_marker_file}"
 
-    #jun22 create "label track.txt"
-    master_duration = librosa.get_duration(filename=master_audio_file)
-    print(f"Writing 5s intervals to {master_marker_file}")
-    #print("master_duration %.2f" % master_duration)
-    with open(master_marker_file, "w") as fh:
-        i = 1
-        tp = 5.0
-        while tp < master_duration-5:
-            fh.write(f"{tp}\t{tp}\t{i:02}\n")            
-            i += 1
-            tp += 5.0
-        #HB 230301 Finally one timepoint at end of file
-        print(f"last timepoint: {master_duration}")
-        #print(f"last timepoint: {master_duration:.3}")
-        #fh.write(f"{master_duration:.3}\t{master_duration:.3}\t{i:02}\n")
-        fh.write(f"{master_duration}\t{master_duration}\t{i:02}\n")            
+
+    #old version, markers every 5s
+    #createMasterMarkerFile(master_marker_file, master_audio_file)
+    #new version 230512, markers according to beat_track
+    createMasterMarkerFileByBeats(master_marker_file, master_audio_file)
     
     #sys.exit()
     
@@ -173,6 +165,64 @@ def main():
     outfile = f"{audio_base} - synced.fcpxml"
 
     tp2fcp(xmlfile, master_tp_file, take_tp_files, outfile)
+
+
+
+
+def createMasterMarkerFile(master_marker_file, master_audio_file):
+    #jun22 create "label track.txt"
+    master_duration = librosa.get_duration(filename=master_audio_file)
+    print(f"Writing 5s intervals to {master_marker_file}")
+    #print("master_duration %.2f" % master_duration)
+    with open(master_marker_file, "w") as fh:
+        i = 1
+        tp = 5.0
+        while tp < master_duration-5:
+            fh.write(f"{tp}\t{tp}\t{i:02}\n")            
+            i += 1
+            tp += 5.0
+        #HB 230301 Finally one timepoint at end of file
+        print(f"last timepoint: {master_duration}")
+        #print(f"last timepoint: {master_duration:.3}")
+        #fh.write(f"{master_duration:.3}\t{master_duration:.3}\t{i:02}\n")
+        fh.write(f"{master_duration}\t{master_duration}\t{i:02}\n")            
+    
+        
+def createMasterMarkerFileByBeats(master_marker_file, master_audio_file, increment=10):
+    master_duration = librosa.get_duration(filename=master_audio_file)
+    print(f"Writing beat_times (increment={increment}) to {master_marker_file}")
+
+    y, sr = librosa.load(master_audio_file)
+
+    # Set the hop length; at 22050 Hz, 512 samples ~= 23ms
+    hop_length = 512
+
+    # Separate harmonics and percussives into two waveforms
+    y_harmonic, y_percussive = librosa.effects.hpss(y)
+
+    # Beat track on the percussive signal
+    tempo, beat_frames = librosa.beat.beat_track(y=y_percussive, sr=sr)
+    print(f"{tempo=}")
+    #print(beat_frames)
+
+    beat_times = librosa.frames_to_time(beat_frames, sr=sr)
+    print(f"{beat_times=}")
+
+    with open(master_marker_file, "w") as fh:
+        #i = 0        
+        i = increment        
+        while i < len(beat_times):
+            tp = beat_times[i]
+            fh.write(f"{tp}\t{tp}\t{i:02}\n")            
+            i += increment
+        #HB 230301 Finally one timepoint at end of file
+        print(f"last timepoint: {master_duration}")
+        #print(f"last timepoint: {master_duration:.3}")
+        #fh.write(f"{master_duration:.3}\t{master_duration:.3}\t{i:02}\n")
+        fh.write(f"{master_duration}\t{master_duration}\t{i:02}\n")            
+            
+        
+
 
 def checkWriteDTW(filename):
     

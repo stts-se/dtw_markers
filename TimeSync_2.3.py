@@ -188,20 +188,31 @@ def createMasterMarkerFile(master_marker_file, master_audio_file):
         fh.write(f"{master_duration}\t{master_duration}\t{i:02}\n")            
     
         
-def createMasterMarkerFileByBeats(master_marker_file, master_audio_file, increment=10):
+def createMasterMarkerFileByBeats(master_marker_file, master_audio_file, increment=10, use_hpss=False):
     master_duration = librosa.get_duration(filename=master_audio_file)
     print(f"Writing beat_times (increment={increment}) to {master_marker_file}")
 
+    print(f"Loading {master_audio_file=}")
     y, sr = librosa.load(master_audio_file)
 
-    # Set the hop length; at 22050 Hz, 512 samples ~= 23ms
-    hop_length = 512
 
-    # Separate harmonics and percussives into two waveforms
-    y_harmonic, y_percussive = librosa.effects.hpss(y)
+    #NOTE with and without hpss seems not to matter - takes about the same time and gives exactly the same results in the tests I've made
+    
+    if use_hpss:
+        print(f"Running hpss")
+       # Separate harmonics and percussives into two waveforms
+        y_harmonic, y_percussive = librosa.effects.hpss(y)
 
-    # Beat track on the percussive signal
-    tempo, beat_frames = librosa.beat.beat_track(y=y_percussive, sr=sr)
+        print(f"Running beat_track")
+        # Beat track on the percussive signal
+        tempo, beat_frames = librosa.beat.beat_track(y=y_percussive, sr=sr)
+
+    else:
+        print(f"Running beat_track")
+        # Beat track on full signal
+        tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
+        
+
     print(f"{tempo=}")
     #print(beat_frames)
 
