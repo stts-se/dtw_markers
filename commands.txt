@@ -1,0 +1,4 @@
+#Simple test
+
+cd humlans-flykt_TEST
+python3 ../TimeSync\ 2.2.py ./Humlans\ flykt\ -\ master.mp3 ./Humlans\ flykt\ -\ take\ 1.mp3 ./Humlans\ flykt\ -\ take\ 2.mp3 ./Humlans\ flykt\ -\ take\ 3.mp3 ./Humlans\ flykt\ -\ take\ 4.mp3
