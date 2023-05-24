@@ -188,7 +188,7 @@ def createMasterMarkerFile(master_marker_file, master_audio_file):
         fh.write(f"{master_duration}\t{master_duration}\t{i:02}\n")            
     
         
-def createMasterMarkerFileByBeats(master_marker_file, master_audio_file, increment=10, use_hpss=False):
+def createMasterMarkerFileByBeats(master_marker_file, master_audio_file, increment=12, use_hpss=False):
     master_duration = librosa.get_duration(filename=master_audio_file)
     print(f"Writing beat_times (increment={increment}) to {master_marker_file}")
 

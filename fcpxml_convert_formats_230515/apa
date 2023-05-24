@@ -1,0 +1,420 @@
+<fcpxml version="1.9">
+	<resources>
+		<format id="r0" frameDuration="1/25s" height="1080" name="FFVideoFormat1080p25" width="1920"/>
+		<format id="r1" frameDuration="1/50s" height="1152" name="FFVideoFormat2048x1152p50" width="2048"/>
+		<asset id="r2" hasVideo="1" duration="4642/25s" name="A001C002_211122_Z4AL.mov" start="1082422/25s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/A001C002_211122_Z4AL.mov" kind="original-media"/>
+		</asset>
+		<asset id="r3" hasVideo="1" duration="4448/25s" name="A001C006_211122_Z4AL.mov" start="235234/5s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/A001C006_211122_Z4AL.mov" kind="original-media"/>
+		</asset>
+		<asset id="r4" hasVideo="1" duration="4593/25s" name="A001C007_211122_Z4AL.mov" start="1182294/25s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/A001C007_211122_Z4AL.mov" kind="original-media"/>
+		</asset>
+		<asset id="r5" hasVideo="1" duration="4544/25s" name="A001C008_211122_Z4AL.mov" start="1189897/25s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/A001C008_211122_Z4AL.mov" kind="original-media"/>
+		</asset>
+		<asset id="r6" hasVideo="1" duration="941/5s" name="B001C003_211122_R4ME.mov" start="1082543/25s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/B001C003_211122_R4ME.mov" kind="original-media"/>
+		</asset>
+		<asset id="r7" hasVideo="1" duration="4593/25s" name="B001C007_211122_R4ME.mov" start="1176118/25s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/B001C007_211122_R4ME.mov" kind="original-media"/>
+		</asset>
+		<asset id="r8" hasVideo="1" duration="4629/25s" name="B001C008_211122_R4ME.mov" start="236463/5s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/B001C008_211122_R4ME.mov" kind="original-media"/>
+		</asset>
+		<asset id="r9" hasVideo="1" duration="4661/25s" name="B001C009_211122_R4ME.mov" start="1189869/25s" format="r1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/CELLO/B001C009_211122_R4ME.mov" kind="original-media"/>
+		</asset>
+		<asset hasAudio="1" id="r10" duration="1034713/4995s" name="YT-2CH-INTRVW-010.WAV" start="86479833641/1998000s" audioChannels="2" audioSources="1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/AUDIO/YT-2CH-INTRVW-010.WAV" kind="original-media"/>
+		</asset>
+		<asset hasAudio="1" id="r11" duration="31093091/166500s" name="YT-2CH-INTRVW-014.WAV" start="93997428521/1998000s" audioChannels="2" audioSources="1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/AUDIO/YT-2CH-INTRVW-014.WAV" kind="original-media"/>
+		</asset>
+		<asset hasAudio="1" id="r12" duration="145243/750s" name="YT-2CH-INTRVW-015.WAV" start="94478387081/1998000s" audioChannels="2" audioSources="1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/AUDIO/YT-2CH-INTRVW-015.WAV" kind="original-media"/>
+		</asset>
+		<asset hasAudio="1" id="r13" duration="396734701/1998000s" name="YT-2CH-INTRVW-016.WAV" start="95076987881/1998000s" audioChannels="2" audioSources="1">
+			<media-rep src="file://localhost/Y:/1.%20PROJECTS/21%20KFO%20002%20-%20Musikhistorien/FOOTAGE/KAMMARMUSIK/21-11-22/AUDIO/YT-2CH-INTRVW-016.WAV" kind="original-media"/>
+		</asset>
+	</resources>
+	<library>
+		<event name="Suite No 1 Sarabande - synced">
+			<project name="Suite No 1 Sarabande - synced">
+				<sequence tcFormat="NDF" duration="27508/25s" tcStart="3600/1s" format="r0">
+					<spine>
+						<gap offset="3600/1s" duration="463/25s" name="Gap" start="3600/1s"/>
+						<gap offset="94984/25s" duration="4253/25s" name="Gap" start="3600/1s"/>
+						<gap offset="20737/5s" duration="72/1s" name="Gap" start="3600/1s"/>
+						<gap offset="109954/25s" duration="3197/25s" name="Gap" start="3600/1s"/>
+						<asset-clip offset="90463/25s" tcFormat="NDF" duration="4521/25s" ref="r2" enabled="1" name="A001C002_211122_Z4AL.mov" start="1082543/25s" format="r1">
+							<timeMap frameSampling="floor">
+								<timept value="1082422/25s" interp="linear" time="1082422/25s"/>
+								<timept value="1083032/25s" interp="linear" time="1083032/25s"/>
+								<timept interp="linear" time="2166276/50s" value="2166256/50s"/>
+								<timept interp="linear" time="2166503/50s" value="2166454/50s"/>
+								<timept interp="linear" time="2166730/50s" value="2166674/50s"/>
+								<timept interp="linear" time="2166950/50s" value="2166865/50s"/>
+								<timept interp="linear" time="2167159/50s" value="2167049/50s"/>
+								<timept interp="linear" time="2167376/50s" value="2167244/50s"/>
+								<timept interp="linear" time="2167606/50s" value="2167456/50s"/>
+								<timept interp="linear" time="2167830/50s" value="2167650/50s"/>
+								<timept interp="linear" time="2168054/50s" value="2167879/50s"/>
+								<timept interp="linear" time="2168279/50s" value="2168104/50s"/>
+								<timept interp="linear" time="2168504/50s" value="2168314/50s"/>
+								<timept interp="linear" time="2168724/50s" value="2168504/50s"/>
+								<timept interp="linear" time="2168942/50s" value="2168707/50s"/>
+								<timept interp="linear" time="2169159/50s" value="2168884/50s"/>
+								<timept interp="linear" time="2169390/50s" value="2169115/50s"/>
+								<timept interp="linear" time="2169607/50s" value="2169314/50s"/>
+								<timept interp="linear" time="2169831/50s" value="2169576/50s"/>
+								<timept interp="linear" time="2170051/50s" value="2169751/50s"/>
+								<timept interp="linear" time="2170275/50s" value="2169990/50s"/>
+								<timept interp="linear" time="2170488/50s" value="2170203/50s"/>
+								<timept interp="linear" time="2170697/50s" value="2170402/50s"/>
+								<timept interp="linear" time="2170924/50s" value="2170604/50s"/>
+								<timept interp="linear" time="2171140/50s" value="2170805/50s"/>
+								<timept interp="linear" time="2171352/50s" value="2170992/50s"/>
+								<timept interp="linear" time="2171587/50s" value="2171187/50s"/>
+								<timept interp="linear" time="2171811/50s" value="2171379/50s"/>
+								<timept interp="linear" time="2172034/50s" value="2171584/50s"/>
+								<timept interp="linear" time="2172252/50s" value="2171807/50s"/>
+								<timept interp="linear" time="2172471/50s" value="2172011/50s"/>
+								<timept interp="linear" time="2172686/50s" value="2172211/50s"/>
+								<timept interp="linear" time="2172911/50s" value="2172411/50s"/>
+								<timept interp="linear" time="2173134/50s" value="2172599/50s"/>
+								<timept interp="linear" time="2173354/50s" value="2172814/50s"/>
+								<timept interp="linear" time="2173577/50s" value="2173024/50s"/>
+								<timept interp="linear" time="2173790/50s" value="2173225/50s"/>
+								<timept interp="linear" time="2174006/50s" value="2173421/50s"/>
+								<timept interp="linear" time="2174184/50s" value="2173604/50s"/>
+								<timept interp="linear" time="2174128/50s" value="2174128/50s"/>
+							</timeMap>
+							<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							<asset-clip offset="1082543/25s" tcFormat="NDF" duration="4521/25s" ref="r6" lane="1" enabled="1" name="B001C003_211122_R4ME.mov" start="1082543/25s" format="r1">
+								<timeMap frameSampling="floor">
+									<timept value="1082543/25s" interp="linear" time="1082543/25s"/>
+									<timept value="1083032/25s" interp="linear" time="1083032/25s"/>
+									<timept interp="linear" time="2166276/50s" value="2166256/50s"/>
+									<timept interp="linear" time="2166503/50s" value="2166454/50s"/>
+									<timept interp="linear" time="2166730/50s" value="2166674/50s"/>
+									<timept interp="linear" time="2166950/50s" value="2166865/50s"/>
+									<timept interp="linear" time="2167159/50s" value="2167049/50s"/>
+									<timept interp="linear" time="2167376/50s" value="2167244/50s"/>
+									<timept interp="linear" time="2167606/50s" value="2167456/50s"/>
+									<timept interp="linear" time="2167830/50s" value="2167650/50s"/>
+									<timept interp="linear" time="2168054/50s" value="2167879/50s"/>
+									<timept interp="linear" time="2168279/50s" value="2168104/50s"/>
+									<timept interp="linear" time="2168504/50s" value="2168314/50s"/>
+									<timept interp="linear" time="2168724/50s" value="2168504/50s"/>
+									<timept interp="linear" time="2168942/50s" value="2168707/50s"/>
+									<timept interp="linear" time="2169159/50s" value="2168884/50s"/>
+									<timept interp="linear" time="2169390/50s" value="2169115/50s"/>
+									<timept interp="linear" time="2169607/50s" value="2169314/50s"/>
+									<timept interp="linear" time="2169831/50s" value="2169576/50s"/>
+									<timept interp="linear" time="2170051/50s" value="2169751/50s"/>
+									<timept interp="linear" time="2170275/50s" value="2169990/50s"/>
+									<timept interp="linear" time="2170488/50s" value="2170203/50s"/>
+									<timept interp="linear" time="2170697/50s" value="2170402/50s"/>
+									<timept interp="linear" time="2170924/50s" value="2170604/50s"/>
+									<timept interp="linear" time="2171140/50s" value="2170805/50s"/>
+									<timept interp="linear" time="2171352/50s" value="2170992/50s"/>
+									<timept interp="linear" time="2171587/50s" value="2171187/50s"/>
+									<timept interp="linear" time="2171811/50s" value="2171379/50s"/>
+									<timept interp="linear" time="2172034/50s" value="2171584/50s"/>
+									<timept interp="linear" time="2172252/50s" value="2171807/50s"/>
+									<timept interp="linear" time="2172471/50s" value="2172011/50s"/>
+									<timept interp="linear" time="2172686/50s" value="2172211/50s"/>
+									<timept interp="linear" time="2172911/50s" value="2172411/50s"/>
+									<timept interp="linear" time="2173134/50s" value="2172599/50s"/>
+									<timept interp="linear" time="2173354/50s" value="2172814/50s"/>
+									<timept interp="linear" time="2173577/50s" value="2173024/50s"/>
+									<timept interp="linear" time="2173790/50s" value="2173225/50s"/>
+									<timept interp="linear" time="2174006/50s" value="2173421/50s"/>
+									<timept interp="linear" time="2174184/50s" value="2173604/50s"/>
+									<timept interp="linear" time="2174496/50s" value="2174496/50s"/>
+								</timeMap>
+								<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							</asset-clip>
+							<asset-clip offset="1082886/25s" duration="3914/25s" ref="r10" lane="2" enabled="1" name="Suite No 1 Sarabande - take 1" start="86544249161/1998000s"/>
+						</asset-clip>
+						<asset-clip offset="99237/25s" tcFormat="NDF" duration="4448/25s" ref="r3" enabled="1" name="A001C006_211122_Z4AL.mov" start="235234/5s" format="r1">
+							<timeMap frameSampling="floor">
+								<timept value="235234/5s" interp="linear" time="235234/5s"/>
+								<timept value="1176444/25s" interp="linear" time="1176444/25s"/>
+								<timept interp="linear" time="2353100/50s" value="2353115/50s"/>
+								<timept interp="linear" time="2353327/50s" value="2353323/50s"/>
+								<timept interp="linear" time="2353554/50s" value="2353549/50s"/>
+								<timept interp="linear" time="2353774/50s" value="2353749/50s"/>
+								<timept interp="linear" time="2353983/50s" value="2353938/50s"/>
+								<timept interp="linear" time="2354200/50s" value="2354140/50s"/>
+								<timept interp="linear" time="2354430/50s" value="2354370/50s"/>
+								<timept interp="linear" time="2354654/50s" value="2354584/50s"/>
+								<timept interp="linear" time="2354878/50s" value="2354808/50s"/>
+								<timept interp="linear" time="2355103/50s" value="2355043/50s"/>
+								<timept interp="linear" time="2355328/50s" value="2355278/50s"/>
+								<timept interp="linear" time="2355548/50s" value="2355488/50s"/>
+								<timept interp="linear" time="2355766/50s" value="2355706/50s"/>
+								<timept interp="linear" time="2355983/50s" value="2355903/50s"/>
+								<timept interp="linear" time="2356214/50s" value="2356128/50s"/>
+								<timept interp="linear" time="2356431/50s" value="2356336/50s"/>
+								<timept interp="linear" time="2356655/50s" value="2356550/50s"/>
+								<timept interp="linear" time="2356875/50s" value="2356780/50s"/>
+								<timept interp="linear" time="2357099/50s" value="2357019/50s"/>
+								<timept interp="linear" time="2357312/50s" value="2357232/50s"/>
+								<timept interp="linear" time="2357521/50s" value="2357431/50s"/>
+								<timept interp="linear" time="2357748/50s" value="2357653/50s"/>
+								<timept interp="linear" time="2357964/50s" value="2357874/50s"/>
+								<timept interp="linear" time="2358176/50s" value="2358076/50s"/>
+								<timept interp="linear" time="2358411/50s" value="2358296/50s"/>
+								<timept interp="linear" time="2358635/50s" value="2358520/50s"/>
+								<timept interp="linear" time="2358858/50s" value="2358738/50s"/>
+								<timept interp="linear" time="2359076/50s" value="2358951/50s"/>
+								<timept interp="linear" time="2359295/50s" value="2359165/50s"/>
+								<timept interp="linear" time="2359510/50s" value="2359380/50s"/>
+								<timept interp="linear" time="2359735/50s" value="2359610/50s"/>
+								<timept interp="linear" time="2359958/50s" value="2359818/50s"/>
+								<timept interp="linear" time="2360178/50s" value="2360043/50s"/>
+								<timept interp="linear" time="2360401/50s" value="2360268/50s"/>
+								<timept interp="linear" time="2360614/50s" value="2360454/50s"/>
+								<timept interp="linear" time="2360830/50s" value="2360645/50s"/>
+								<timept interp="linear" time="2361008/50s" value="2360833/50s"/>
+								<timept interp="linear" time="2361239/50s" value="2361239/50s"/>
+							</timeMap>
+							<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							<asset-clip offset="235234/5s" tcFormat="NDF" duration="4448/25s" ref="r7" lane="1" enabled="1" name="B001C007_211122_R4ME.mov" start="235234/5s" format="r1">
+								<timeMap frameSampling="floor">
+									<timept value="1176118/25s" interp="linear" time="1176118/25s"/>
+									<timept value="1176444/25s" interp="linear" time="1176444/25s"/>
+									<timept interp="linear" time="2353100/50s" value="2353115/50s"/>
+									<timept interp="linear" time="2353327/50s" value="2353323/50s"/>
+									<timept interp="linear" time="2353554/50s" value="2353549/50s"/>
+									<timept interp="linear" time="2353774/50s" value="2353749/50s"/>
+									<timept interp="linear" time="2353983/50s" value="2353938/50s"/>
+									<timept interp="linear" time="2354200/50s" value="2354140/50s"/>
+									<timept interp="linear" time="2354430/50s" value="2354370/50s"/>
+									<timept interp="linear" time="2354654/50s" value="2354584/50s"/>
+									<timept interp="linear" time="2354878/50s" value="2354808/50s"/>
+									<timept interp="linear" time="2355103/50s" value="2355043/50s"/>
+									<timept interp="linear" time="2355328/50s" value="2355278/50s"/>
+									<timept interp="linear" time="2355548/50s" value="2355488/50s"/>
+									<timept interp="linear" time="2355766/50s" value="2355706/50s"/>
+									<timept interp="linear" time="2355983/50s" value="2355903/50s"/>
+									<timept interp="linear" time="2356214/50s" value="2356128/50s"/>
+									<timept interp="linear" time="2356431/50s" value="2356336/50s"/>
+									<timept interp="linear" time="2356655/50s" value="2356550/50s"/>
+									<timept interp="linear" time="2356875/50s" value="2356780/50s"/>
+									<timept interp="linear" time="2357099/50s" value="2357019/50s"/>
+									<timept interp="linear" time="2357312/50s" value="2357232/50s"/>
+									<timept interp="linear" time="2357521/50s" value="2357431/50s"/>
+									<timept interp="linear" time="2357748/50s" value="2357653/50s"/>
+									<timept interp="linear" time="2357964/50s" value="2357874/50s"/>
+									<timept interp="linear" time="2358176/50s" value="2358076/50s"/>
+									<timept interp="linear" time="2358411/50s" value="2358296/50s"/>
+									<timept interp="linear" time="2358635/50s" value="2358520/50s"/>
+									<timept interp="linear" time="2358858/50s" value="2358738/50s"/>
+									<timept interp="linear" time="2359076/50s" value="2358951/50s"/>
+									<timept interp="linear" time="2359295/50s" value="2359165/50s"/>
+									<timept interp="linear" time="2359510/50s" value="2359380/50s"/>
+									<timept interp="linear" time="2359735/50s" value="2359610/50s"/>
+									<timept interp="linear" time="2359958/50s" value="2359818/50s"/>
+									<timept interp="linear" time="2360178/50s" value="2360043/50s"/>
+									<timept interp="linear" time="2360401/50s" value="2360268/50s"/>
+									<timept interp="linear" time="2360614/50s" value="2360454/50s"/>
+									<timept interp="linear" time="2360830/50s" value="2360645/50s"/>
+									<timept interp="linear" time="2361008/50s" value="2360833/50s"/>
+									<timept interp="linear" time="2361425/50s" value="2361425/50s"/>
+								</timeMap>
+								<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							</asset-clip>
+							<asset-clip offset="1176443/25s" duration="794/5s" ref="r11" lane="2" enabled="1" name="Suite No 1 Sarabande - take 2" start="94021324601/1998000s"/>
+						</asset-clip>
+						<asset-clip offset="21097/5s" tcFormat="NDF" duration="4469/25s" ref="r4" enabled="1" name="A001C007_211122_Z4AL.mov" start="1182418/25s" format="r1">
+							<timeMap frameSampling="floor">
+								<timept value="1182294/25s" interp="linear" time="1182294/25s"/>
+								<timept value="1182629/25s" interp="linear" time="1182629/25s"/>
+								<timept interp="linear" time="2365470/50s" value="2365475/50s"/>
+								<timept interp="linear" time="2365697/50s" value="2365693/50s"/>
+								<timept interp="linear" time="2365924/50s" value="2365914/50s"/>
+								<timept interp="linear" time="2366144/50s" value="2366144/50s"/>
+								<timept interp="linear" time="2366353/50s" value="2366353/50s"/>
+								<timept interp="linear" time="2366570/50s" value="2366565/50s"/>
+								<timept interp="linear" time="2366800/50s" value="2366795/50s"/>
+								<timept interp="linear" time="2367024/50s" value="2367019/50s"/>
+								<timept interp="linear" time="2367248/50s" value="2367248/50s"/>
+								<timept interp="linear" time="2367473/50s" value="2367473/50s"/>
+								<timept interp="linear" time="2367698/50s" value="2367693/50s"/>
+								<timept interp="linear" time="2367918/50s" value="2367888/50s"/>
+								<timept interp="linear" time="2368136/50s" value="2368113/50s"/>
+								<timept interp="linear" time="2368353/50s" value="2368328/50s"/>
+								<timept interp="linear" time="2368584/50s" value="2368554/50s"/>
+								<timept interp="linear" time="2368801/50s" value="2368771/50s"/>
+								<timept interp="linear" time="2369025/50s" value="2368985/50s"/>
+								<timept interp="linear" time="2369245/50s" value="2369205/50s"/>
+								<timept interp="linear" time="2369469/50s" value="2369459/50s"/>
+								<timept interp="linear" time="2369682/50s" value="2369662/50s"/>
+								<timept interp="linear" time="2369891/50s" value="2369876/50s"/>
+								<timept interp="linear" time="2370118/50s" value="2370088/50s"/>
+								<timept interp="linear" time="2370334/50s" value="2370314/50s"/>
+								<timept interp="linear" time="2370546/50s" value="2370516/50s"/>
+								<timept interp="linear" time="2370781/50s" value="2370746/50s"/>
+								<timept interp="linear" time="2371005/50s" value="2370975/50s"/>
+								<timept interp="linear" time="2371228/50s" value="2371188/50s"/>
+								<timept interp="linear" time="2371446/50s" value="2371401/50s"/>
+								<timept interp="linear" time="2371665/50s" value="2371610/50s"/>
+								<timept interp="linear" time="2371880/50s" value="2371825/50s"/>
+								<timept interp="linear" time="2372105/50s" value="2372060/50s"/>
+								<timept interp="linear" time="2372328/50s" value="2372283/50s"/>
+								<timept interp="linear" time="2372548/50s" value="2372518/50s"/>
+								<timept interp="linear" time="2372771/50s" value="2372741/50s"/>
+								<timept interp="linear" time="2372984/50s" value="2372969/50s"/>
+								<timept interp="linear" time="2373200/50s" value="2373180/50s"/>
+								<timept interp="linear" time="2373378/50s" value="2373368/50s"/>
+								<timept interp="linear" time="2373774/50s" value="2373774/50s"/>
+							</timeMap>
+							<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							<asset-clip offset="1182418/25s" tcFormat="NDF" duration="4469/25s" ref="r8" lane="1" enabled="1" name="B001C008_211122_R4ME.mov" start="1182418/25s" format="r1">
+								<timeMap frameSampling="floor">
+									<timept value="236463/5s" interp="linear" time="236463/5s"/>
+									<timept value="1182629/25s" interp="linear" time="1182629/25s"/>
+									<timept interp="linear" time="2365470/50s" value="2365475/50s"/>
+									<timept interp="linear" time="2365697/50s" value="2365693/50s"/>
+									<timept interp="linear" time="2365924/50s" value="2365914/50s"/>
+									<timept interp="linear" time="2366144/50s" value="2366144/50s"/>
+									<timept interp="linear" time="2366353/50s" value="2366353/50s"/>
+									<timept interp="linear" time="2366570/50s" value="2366565/50s"/>
+									<timept interp="linear" time="2366800/50s" value="2366795/50s"/>
+									<timept interp="linear" time="2367024/50s" value="2367019/50s"/>
+									<timept interp="linear" time="2367248/50s" value="2367248/50s"/>
+									<timept interp="linear" time="2367473/50s" value="2367473/50s"/>
+									<timept interp="linear" time="2367698/50s" value="2367693/50s"/>
+									<timept interp="linear" time="2367918/50s" value="2367888/50s"/>
+									<timept interp="linear" time="2368136/50s" value="2368113/50s"/>
+									<timept interp="linear" time="2368353/50s" value="2368328/50s"/>
+									<timept interp="linear" time="2368584/50s" value="2368554/50s"/>
+									<timept interp="linear" time="2368801/50s" value="2368771/50s"/>
+									<timept interp="linear" time="2369025/50s" value="2368985/50s"/>
+									<timept interp="linear" time="2369245/50s" value="2369205/50s"/>
+									<timept interp="linear" time="2369469/50s" value="2369459/50s"/>
+									<timept interp="linear" time="2369682/50s" value="2369662/50s"/>
+									<timept interp="linear" time="2369891/50s" value="2369876/50s"/>
+									<timept interp="linear" time="2370118/50s" value="2370088/50s"/>
+									<timept interp="linear" time="2370334/50s" value="2370314/50s"/>
+									<timept interp="linear" time="2370546/50s" value="2370516/50s"/>
+									<timept interp="linear" time="2370781/50s" value="2370746/50s"/>
+									<timept interp="linear" time="2371005/50s" value="2370975/50s"/>
+									<timept interp="linear" time="2371228/50s" value="2371188/50s"/>
+									<timept interp="linear" time="2371446/50s" value="2371401/50s"/>
+									<timept interp="linear" time="2371665/50s" value="2371610/50s"/>
+									<timept interp="linear" time="2371880/50s" value="2371825/50s"/>
+									<timept interp="linear" time="2372105/50s" value="2372060/50s"/>
+									<timept interp="linear" time="2372328/50s" value="2372283/50s"/>
+									<timept interp="linear" time="2372548/50s" value="2372518/50s"/>
+									<timept interp="linear" time="2372771/50s" value="2372741/50s"/>
+									<timept interp="linear" time="2372984/50s" value="2372969/50s"/>
+									<timept interp="linear" time="2373200/50s" value="2373180/50s"/>
+									<timept interp="linear" time="2373378/50s" value="2373368/50s"/>
+									<timept interp="linear" time="2373888/50s" value="2373888/50s"/>
+								</timeMap>
+								<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							</asset-clip>
+							<asset-clip offset="1182629/25s" duration="4054/25s" ref="r12" lane="2" enabled="1" name="Suite No 1 Sarabande - take 3" start="94515709721/1998000s"/>
+						</asset-clip>
+						<asset-clip offset="113151/25s" tcFormat="NDF" duration="4357/25s" ref="r5" enabled="1" name="A001C008_211122_Z4AL.mov" start="1190084/25s" format="r1">
+							<timeMap frameSampling="floor">
+								<timept value="1189897/25s" interp="linear" time="1189897/25s"/>
+								<timept value="95119585199/1998000s" interp="linear" time="95119585199/1998000s"/>
+								<timept interp="linear" time="2380581/50s" value="2380596/50s"/>
+								<timept interp="linear" time="2380808/50s" value="2380818/50s"/>
+								<timept interp="linear" time="2381035/50s" value="2381045/50s"/>
+								<timept interp="linear" time="2381255/50s" value="2381250/50s"/>
+								<timept interp="linear" time="2381464/50s" value="2381454/50s"/>
+								<timept interp="linear" time="2381681/50s" value="2381656/50s"/>
+								<timept interp="linear" time="2381911/50s" value="2381876/50s"/>
+								<timept interp="linear" time="2382135/50s" value="2382120/50s"/>
+								<timept interp="linear" time="2382359/50s" value="2382344/50s"/>
+								<timept interp="linear" time="2382584/50s" value="2382584/50s"/>
+								<timept interp="linear" time="2382809/50s" value="2382814/50s"/>
+								<timept interp="linear" time="2383029/50s" value="2383029/50s"/>
+								<timept interp="linear" time="2383247/50s" value="2383227/50s"/>
+								<timept interp="linear" time="2383464/50s" value="2383439/50s"/>
+								<timept interp="linear" time="2383695/50s" value="2383675/50s"/>
+								<timept interp="linear" time="2383912/50s" value="2383882/50s"/>
+								<timept interp="linear" time="2384136/50s" value="2384131/50s"/>
+								<timept interp="linear" time="2384356/50s" value="2384336/50s"/>
+								<timept interp="linear" time="2384580/50s" value="2384580/50s"/>
+								<timept interp="linear" time="2384793/50s" value="2384788/50s"/>
+								<timept interp="linear" time="2385002/50s" value="2384997/50s"/>
+								<timept interp="linear" time="2385229/50s" value="2385239/50s"/>
+								<timept interp="linear" time="2385445/50s" value="2385464/50s"/>
+								<timept interp="linear" time="2385657/50s" value="2385647/50s"/>
+								<timept interp="linear" time="2385892/50s" value="2385862/50s"/>
+								<timept interp="linear" time="2386116/50s" value="2386086/50s"/>
+								<timept interp="linear" time="2386339/50s" value="2386304/50s"/>
+								<timept interp="linear" time="2386557/50s" value="2386532/50s"/>
+								<timept interp="linear" time="2386776/50s" value="2386726/50s"/>
+								<timept interp="linear" time="2386991/50s" value="2386946/50s"/>
+								<timept interp="linear" time="2387216/50s" value="2387176/50s"/>
+								<timept interp="linear" time="2387439/50s" value="2387404/50s"/>
+								<timept interp="linear" time="2387659/50s" value="2387629/50s"/>
+								<timept interp="linear" time="2387882/50s" value="2387854/50s"/>
+								<timept interp="linear" time="2388095/50s" value="2388065/50s"/>
+								<timept interp="linear" time="2388311/50s" value="2388269/50s"/>
+								<timept interp="linear" time="2388489/50s" value="2388474/50s"/>
+								<timept interp="linear" time="2388882/50s" value="2388882/50s"/>
+							</timeMap>
+							<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							<asset-clip offset="1190084/25s" tcFormat="NDF" duration="4357/25s" ref="r9" lane="1" enabled="1" name="B001C009_211122_R4ME.mov" start="1190084/25s" format="r1">
+								<timeMap frameSampling="floor">
+									<timept value="1189869/25s" interp="linear" time="1189869/25s"/>
+									<timept value="238037/5s" interp="linear" time="238037/5s"/>
+									<timept interp="linear" time="2380582/50s" value="2380597/50s"/>
+									<timept interp="linear" time="2380809/50s" value="2380819/50s"/>
+									<timept interp="linear" time="2381036/50s" value="2381046/50s"/>
+									<timept interp="linear" time="2381256/50s" value="2381251/50s"/>
+									<timept interp="linear" time="2381465/50s" value="2381455/50s"/>
+									<timept interp="linear" time="2381682/50s" value="2381657/50s"/>
+									<timept interp="linear" time="2381912/50s" value="2381877/50s"/>
+									<timept interp="linear" time="2382136/50s" value="2382121/50s"/>
+									<timept interp="linear" time="2382360/50s" value="2382345/50s"/>
+									<timept interp="linear" time="2382585/50s" value="2382585/50s"/>
+									<timept interp="linear" time="2382810/50s" value="2382815/50s"/>
+									<timept interp="linear" time="2383030/50s" value="2383030/50s"/>
+									<timept interp="linear" time="2383248/50s" value="2383228/50s"/>
+									<timept interp="linear" time="2383465/50s" value="2383440/50s"/>
+									<timept interp="linear" time="2383696/50s" value="2383676/50s"/>
+									<timept interp="linear" time="2383913/50s" value="2383883/50s"/>
+									<timept interp="linear" time="2384137/50s" value="2384132/50s"/>
+									<timept interp="linear" time="2384357/50s" value="2384337/50s"/>
+									<timept interp="linear" time="2384581/50s" value="2384581/50s"/>
+									<timept interp="linear" time="2384794/50s" value="2384789/50s"/>
+									<timept interp="linear" time="2385003/50s" value="2384998/50s"/>
+									<timept interp="linear" time="2385230/50s" value="2385240/50s"/>
+									<timept interp="linear" time="2385446/50s" value="2385465/50s"/>
+									<timept interp="linear" time="2385658/50s" value="2385648/50s"/>
+									<timept interp="linear" time="2385893/50s" value="2385863/50s"/>
+									<timept interp="linear" time="2386117/50s" value="2386087/50s"/>
+									<timept interp="linear" time="2386340/50s" value="2386305/50s"/>
+									<timept interp="linear" time="2386558/50s" value="2386533/50s"/>
+									<timept interp="linear" time="2386777/50s" value="2386727/50s"/>
+									<timept interp="linear" time="2386992/50s" value="2386947/50s"/>
+									<timept interp="linear" time="2387217/50s" value="2387177/50s"/>
+									<timept interp="linear" time="2387440/50s" value="2387405/50s"/>
+									<timept interp="linear" time="2387660/50s" value="2387630/50s"/>
+									<timept interp="linear" time="2387883/50s" value="2387855/50s"/>
+									<timept interp="linear" time="2388096/50s" value="2388066/50s"/>
+									<timept interp="linear" time="2388312/50s" value="2388270/50s"/>
+									<timept interp="linear" time="2388490/50s" value="2388475/50s"/>
+									<timept interp="linear" time="2389061/50s" value="2389061/50s"/>
+								</timeMap>
+								<adjust-transform position="0 0" scale="1 1" anchor="0 0"/>
+							</asset-clip>
+							<asset-clip offset="238037/5s" duration="4051/25s" ref="r13" lane="2" enabled="1" name="Suite No 1 Sarabande - take 4" start="95119585241/1998000s"/>
+						</asset-clip>
+					</spine>
+				</sequence>
+			</project>
+		</event>
+	</library>
+</fcpxml>
